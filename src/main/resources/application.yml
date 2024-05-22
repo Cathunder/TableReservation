@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: TableReservation
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/project?serverTimezone=UTC&characterEncoding=UTF-8
+    username: root
+    password: 1234
+
+  jpa:
+    show-sql: true
+    database: mysql
+
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
+
+  thymeleaf:
+    cache: false
+
+  jwt:
+    secret: em5mbmZuZGl6bS1laHRtd2lybWZrdG0tZGtzd2tzaXZtLWRscXBmbXprc2stc3BmbXJscmtzeHAtYXBmd3Bzawo=
