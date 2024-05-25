@@ -21,7 +21,6 @@ public class PartnerController {
 
     /**
      * 파트너 회원가입
-     * <p>아이디의 중복여부 확인, 비밀번호는 암호화해서 저장
      */
     @PostMapping("/partner/register")
     public ResponseEntity<?> register(@RequestBody Auth.register request) {
@@ -32,10 +31,11 @@ public class PartnerController {
 
     /**
      * 파트너 로그인
-     * 아이디와 비밀번호가 일치하는지 확인
      */
     @PostMapping("/partner/login")
     public ResponseEntity<?> login(@RequestBody Auth.login request) {
-        return null;
+        PartnerEntity partnerEntity = this.partnerService.authenticate(request);
+        String token = this.tokenProvider.generateToken(partnerEntity.getLoginId(), partnerEntity.getRole());
+        return ResponseEntity.ok(token);
     }
 }

@@ -33,9 +33,9 @@ public class TokenProvider {
 
         return Jwts.builder()
                 .setClaims(claims)
-                .setIssuedAt(now)  // 생성시간
-                .setExpiration(expiration) // 만료시간
-                .signWith(SignatureAlgorithm.HS512, this.secretKey) // 사용할 암호화 알고리즘, 비밀키
+                .setIssuedAt(now)
+                .setExpiration(expiration)
+                .signWith(SignatureAlgorithm.HS512, this.secretKey)
                 .compact();
     }
 

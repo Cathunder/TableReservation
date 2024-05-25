@@ -37,7 +37,7 @@ public class PartnerEntity implements UserDetails {
 
     @Override
     public String getUsername() {
-        return "";
+        return this.loginId;
     }
 
     @Override

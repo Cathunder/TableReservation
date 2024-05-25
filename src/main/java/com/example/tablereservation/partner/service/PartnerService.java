@@ -42,6 +42,13 @@ public class PartnerService implements UserDetailsService {
      * 로그인 시 검증
      */
     public PartnerEntity authenticate(Auth.login partner) {
-        return null;
+        PartnerEntity partnerEntity = this.partnerRepository.findByLoginId(partner.getLoginId())
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 아이디입니다."));
+
+        if (!this.passwordEncoder.matches(partner.getPassword(), partnerEntity.getPassword())) {
+            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+        }
+
+        return partnerEntity;
     }
 }
