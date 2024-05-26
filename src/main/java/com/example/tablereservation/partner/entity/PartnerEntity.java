@@ -13,7 +13,7 @@ import java.util.Collections;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "PARTNER")
+@Entity(name = "partner")
 @Builder
 public class PartnerEntity implements UserDetails {
 

@@ -9,13 +9,15 @@ public class Auth {
     public static class register {
         private String loginId;
         private String password;
+        private String name;
         private String role;
 
         public PartnerEntity toEntity() {
             return PartnerEntity.builder()
-                    .loginId(loginId)
-                    .password(password)
-                    .role(role)
+                    .loginId(this.loginId)
+                    .password(this.password)
+                    .name(this.name)
+                    .role(this.role)
                     .build();
         }
     }
