@@ -1,6 +1,6 @@
 package com.example.tablereservation.partner.controller;
 
-import com.example.tablereservation.partner.dto.Auth;
+import com.example.tablereservation.partner.dto.AuthPartner;
 import com.example.tablereservation.partner.entity.PartnerEntity;
 import com.example.tablereservation.partner.service.PartnerService;
 import com.example.tablereservation.security.TokenProvider;
@@ -23,7 +23,7 @@ public class PartnerController {
      * 파트너 회원가입
      */
     @PostMapping("/partner/register")
-    public ResponseEntity<?> register(@RequestBody Auth.register request) {
+    public ResponseEntity<?> register(@RequestBody AuthPartner.register request) {
         PartnerEntity entity = this.partnerService.register(request);
         return ResponseEntity.ok(entity);
     }
@@ -32,7 +32,7 @@ public class PartnerController {
      * 파트너 로그인
      */
     @PostMapping("/partner/login")
-    public ResponseEntity<?> login(@RequestBody Auth.login request) {
+    public ResponseEntity<?> login(@RequestBody AuthPartner.login request) {
         PartnerEntity partnerEntity = this.partnerService.authenticate(request);
         String token = this.tokenProvider.generateToken(partnerEntity.getLoginId(), partnerEntity.getRole());
         return ResponseEntity.ok(token);

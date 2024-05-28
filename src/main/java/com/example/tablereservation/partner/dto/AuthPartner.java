@@ -3,7 +3,7 @@ package com.example.tablereservation.partner.dto;
 import com.example.tablereservation.partner.entity.PartnerEntity;
 import lombok.Data;
 
-public class Auth {
+public class AuthPartner {
 
     @Data
     public static class register {

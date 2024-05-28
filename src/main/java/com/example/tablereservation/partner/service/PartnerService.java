@@ -2,7 +2,7 @@ package com.example.tablereservation.partner.service;
 
 import com.example.tablereservation.exception.ErrorCode;
 import com.example.tablereservation.exception.ReservationException;
-import com.example.tablereservation.partner.dto.Auth;
+import com.example.tablereservation.partner.dto.AuthPartner;
 import com.example.tablereservation.partner.entity.PartnerEntity;
 import com.example.tablereservation.partner.repository.PartnerRepository;
 import lombok.AllArgsConstructor;
@@ -29,7 +29,7 @@ public class PartnerService implements UserDetailsService {
     /**
      * 회원가입
      */
-    public PartnerEntity register(Auth.register partner) {
+    public PartnerEntity register(AuthPartner.register partner) {
         boolean exist = this.partnerRepository.existsByLoginId(partner.getLoginId());
         if (exist) {
             throw new ReservationException(ErrorCode.ID_ALREADY_EXIST);
@@ -42,7 +42,7 @@ public class PartnerService implements UserDetailsService {
     /**
      * 로그인 시 검증
      */
-    public PartnerEntity authenticate(Auth.login partner) {
+    public PartnerEntity authenticate(AuthPartner.login partner) {
         PartnerEntity partnerEntity = this.partnerRepository.findByLoginId(partner.getLoginId())
                 .orElseThrow(() -> new ReservationException(ErrorCode.ID_NOT_EXIST));
 
