@@ -2,7 +2,9 @@ package com.example.tablereservation.partner.service;
 
 import com.example.tablereservation.exception.ErrorCode;
 import com.example.tablereservation.exception.ReservationException;
-import com.example.tablereservation.partner.dto.AuthPartner;
+import com.example.tablereservation.partner.dto.PartnerDto;
+import com.example.tablereservation.partner.dto.RegisterPartner;
+import com.example.tablereservation.partner.dto.LoginPartner;
 import com.example.tablereservation.partner.entity.PartnerEntity;
 import com.example.tablereservation.partner.repository.PartnerRepository;
 import lombok.AllArgsConstructor;
@@ -29,20 +31,22 @@ public class PartnerService implements UserDetailsService {
     /**
      * 회원가입
      */
-    public PartnerEntity register(AuthPartner.register partner) {
-        boolean exist = this.partnerRepository.existsByLoginId(partner.getLoginId());
+    public PartnerDto register(RegisterPartner.Request request) {
+        boolean exist = this.partnerRepository.existsByLoginId(request.getLoginId());
         if (exist) {
             throw new ReservationException(ErrorCode.ID_ALREADY_EXIST);
         }
 
-        partner.setPassword(passwordEncoder.encode(partner.getPassword()));
-        return this.partnerRepository.save(partner.toEntity());
+        request.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        PartnerEntity entity = this.partnerRepository.save(RegisterPartner.Request.toEntity(request));
+        return PartnerDto.fromEntity(entity);
     }
 
     /**
      * 로그인 시 검증
      */
-    public PartnerEntity authenticate(AuthPartner.login partner) {
+    public PartnerEntity authenticate(LoginPartner partner) {
         PartnerEntity partnerEntity = this.partnerRepository.findByLoginId(partner.getLoginId())
                 .orElseThrow(() -> new ReservationException(ErrorCode.ID_NOT_EXIST));
 
