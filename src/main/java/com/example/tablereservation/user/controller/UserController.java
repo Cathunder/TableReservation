@@ -1,8 +1,10 @@
 package com.example.tablereservation.user.controller;
 
+import com.example.tablereservation.security.TokenProvider;
 import com.example.tablereservation.user.dto.LoginUser;
 import com.example.tablereservation.user.dto.RegisterUser;
 import com.example.tablereservation.user.dto.UserDto;
+import com.example.tablereservation.user.entity.UserEntity;
 import com.example.tablereservation.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserController {
 
+    private final TokenProvider tokenProvider;
     private final UserService userService;
 
     /**
@@ -25,12 +28,13 @@ public class UserController {
         return ResponseEntity.ok(RegisterUser.Response.fromDto(userDto));
     }
 
-//    /**
-//     * 유저 로그인
-//     */
-//    @PostMapping("/user/login")
-//    public ResponseEntity<?> login(@RequestBody LoginUser request) {
-//        this.userService.
-//        return ResponseEntity.ok(null);
-//    }
+    /**
+     * 유저 로그인
+     */
+    @PostMapping("/user/login")
+    public ResponseEntity<?> login(@RequestBody LoginUser request) {
+        UserEntity userEntity = this.userService.authenticate(request);
+        String token = this.tokenProvider.generateToken(userEntity.getLoginId(), userEntity.getRole());
+        return ResponseEntity.ok(token);
+    }
 }
