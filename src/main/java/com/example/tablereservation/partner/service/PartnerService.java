@@ -1,5 +1,7 @@
 package com.example.tablereservation.partner.service;
 
+import com.example.tablereservation.exception.ErrorCode;
+import com.example.tablereservation.exception.ReservationException;
 import com.example.tablereservation.partner.dto.Auth;
 import com.example.tablereservation.partner.entity.PartnerEntity;
 import com.example.tablereservation.partner.repository.PartnerRepository;
@@ -7,7 +9,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,9 +21,9 @@ public class PartnerService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) {
         return this.partnerRepository.findByLoginId(username)
-                .orElseThrow(() -> new UsernameNotFoundException("해당 유저를 찾지 못했습니다. -> " + username));
+                .orElseThrow(() -> new ReservationException(ErrorCode.PARTNER_NOT_FOUND));
     }
 
     /**
@@ -31,7 +32,7 @@ public class PartnerService implements UserDetailsService {
     public PartnerEntity register(Auth.register partner) {
         boolean exist = this.partnerRepository.existsByLoginId(partner.getLoginId());
         if (exist) {
-            throw new RuntimeException("이미 사용중인 아이디입니다.");
+            throw new ReservationException(ErrorCode.ID_ALREADY_EXIST);
         }
 
         partner.setPassword(passwordEncoder.encode(partner.getPassword()));
@@ -43,10 +44,10 @@ public class PartnerService implements UserDetailsService {
      */
     public PartnerEntity authenticate(Auth.login partner) {
         PartnerEntity partnerEntity = this.partnerRepository.findByLoginId(partner.getLoginId())
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 아이디입니다."));
+                .orElseThrow(() -> new ReservationException(ErrorCode.ID_NOT_EXIST));
 
         if (!this.passwordEncoder.matches(partner.getPassword(), partnerEntity.getPassword())) {
-            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+            throw new ReservationException(ErrorCode.PASSWORD_INCORRECT);
         }
 
         return partnerEntity;
