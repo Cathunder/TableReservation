@@ -22,7 +22,7 @@ public class PartnerService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return this.partnerRepository.findByLoginId(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found -> " + username));
+                .orElseThrow(() -> new UsernameNotFoundException("해당 유저를 찾지 못했습니다. -> " + username));
     }
 
     /**
