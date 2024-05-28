@@ -7,7 +7,7 @@ import com.example.tablereservation.partner.dto.RegisterPartner;
 import com.example.tablereservation.partner.dto.LoginPartner;
 import com.example.tablereservation.partner.entity.PartnerEntity;
 import com.example.tablereservation.partner.repository.PartnerRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class PartnerService implements UserDetailsService {
 
     private final PartnerRepository partnerRepository;

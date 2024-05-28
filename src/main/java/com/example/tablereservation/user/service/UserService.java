@@ -7,14 +7,14 @@ import com.example.tablereservation.user.dto.RegisterUser;
 import com.example.tablereservation.user.dto.UserDto;
 import com.example.tablereservation.user.entity.UserEntity;
 import com.example.tablereservation.user.repository.UserRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
