@@ -10,7 +10,6 @@ import java.util.Collection;
 import java.util.Collections;
 
 @Getter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "partner")
