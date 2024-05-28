@@ -36,7 +36,9 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 antMatcher("/partner/register"),
-                                antMatcher("/partner/login")
+                                antMatcher("/partner/login"),
+                                antMatcher("/user/register"),
+                                antMatcher("/user/login")
                         )
                         .permitAll()
                         .anyRequest().authenticated())
