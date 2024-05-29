@@ -45,7 +45,7 @@ public class RegisterPartner {
                     .id(partnerDto.getId())
                     .loginId(partnerDto.getLoginId())
                     .password(partnerDto.getPassword())
-                    .name(partnerDto.getPassword())
+                    .name(partnerDto.getName())
                     .role(partnerDto.getRole())
                     .build();
         }
