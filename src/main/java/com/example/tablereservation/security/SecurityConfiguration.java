@@ -33,18 +33,23 @@ public class SecurityConfiguration {
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/store/add"
+                                "/store/add",
+                                "/store/update/"
                         ).hasRole("PARTNER")
+                        .requestMatchers(
+                                "/partner/register", "/partner/login",
+                                "/user/login", "/user/register"
+                        ).permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(this.authenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return web -> web.ignoring().requestMatchers(
-                "/partner/register", "/partner/login",
-                "/user/login", "/user/register"
-        );
-    }
+//    @Bean
+//    public WebSecurityCustomizer webSecurityCustomizer() {
+//        return web -> web.ignoring().requestMatchers(
+//                "/partner/register", "/partner/login",
+//                "/user/login", "/user/register"
+//        );
+//    }
 }
