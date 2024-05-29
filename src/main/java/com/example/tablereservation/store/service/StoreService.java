@@ -71,7 +71,7 @@ public class StoreService {
         storeEntity.setStoreAddress(request.getStoreAddress());
         storeEntity.setStorePhone(request.getStorePhone());
         storeEntity.setStoreIntroduction(request.getStoreIntroduction());
-        storeEntity.setUpdateDate(LocalDateTime.now());
+        storeEntity.setUpdatedDate(LocalDateTime.now());
     }
 
     /**

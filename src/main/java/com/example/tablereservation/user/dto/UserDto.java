@@ -2,12 +2,13 @@ package com.example.tablereservation.user.dto;
 
 import com.example.tablereservation.user.entity.UserEntity;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class UserDto {
     private Long id;
     private String loginId;

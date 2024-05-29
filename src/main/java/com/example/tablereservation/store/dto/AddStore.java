@@ -4,10 +4,9 @@ import com.example.tablereservation.partner.entity.PartnerEntity;
 import com.example.tablereservation.store.entity.StoreEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class AddStore {
 
@@ -15,7 +14,7 @@ public class AddStore {
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
-    @Builder
+    @SuperBuilder
     public static class Request {
         private Long partnerId;
         private String storeName;
@@ -30,8 +29,6 @@ public class AddStore {
                     .storeAddress(request.getStoreAddress())
                     .storePhone(request.getStorePhone())
                     .storeIntroduction(request.getStoreIntroduction())
-                    .createDate(LocalDateTime.now())
-                    .updateDate(LocalDateTime.now())
                     .build();
         }
     }
@@ -40,7 +37,7 @@ public class AddStore {
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
-    @Builder
+    @SuperBuilder
     public static class Response {
         private Long partnerId;
         private String storeName;
@@ -48,20 +45,20 @@ public class AddStore {
         private String storePhone;
         private String storeIntroduction;
 
-//        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-        private LocalDateTime createDate;
-//        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-        private LocalDateTime updateDate;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+        private LocalDateTime createdDate;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+        private LocalDateTime updatedDate;
 
-        public static Response fromDto(StoreDto partnerDto) {
+        public static Response fromDto(StoreDto storeDto) {
             return Response.builder()
-                    .partnerId(partnerDto.getPartnerId())
-                    .storeName(partnerDto.getStoreName())
-                    .storeAddress(partnerDto.getStoreAddress())
-                    .storePhone(partnerDto.getStorePhone())
-                    .storeIntroduction(partnerDto.getStoreIntroduction())
-                    .createDate(partnerDto.getCreateDate())
-                    .updateDate(partnerDto.getUpdateDate())
+                    .partnerId(storeDto.getPartnerId())
+                    .storeName(storeDto.getStoreName())
+                    .storeAddress(storeDto.getStoreAddress())
+                    .storePhone(storeDto.getStorePhone())
+                    .storeIntroduction(storeDto.getStoreIntroduction())
+                    .createdDate(storeDto.getCreateDate())
+                    .updatedDate(storeDto.getUpdateDate())
                     .build();
         }
     }

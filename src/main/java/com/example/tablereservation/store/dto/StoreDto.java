@@ -2,6 +2,7 @@ package com.example.tablereservation.store.dto;
 
 import com.example.tablereservation.store.entity.StoreEntity;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
@@ -9,7 +10,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class StoreDto {
     private Long id;
     private Long partnerId;
@@ -28,8 +29,8 @@ public class StoreDto {
                 .storeAddress(storeEntity.getStoreAddress())
                 .storePhone(storeEntity.getStorePhone())
                 .storeIntroduction(storeEntity.getStoreIntroduction())
-                .createDate(storeEntity.getCreateDate())
-                .updateDate(storeEntity.getUpdateDate())
+                .createDate(storeEntity.getCreatedDate())
+                .updateDate(storeEntity.getUpdatedDate())
                 .build();
     }
 }

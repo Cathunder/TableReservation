@@ -1,7 +1,9 @@
 package com.example.tablereservation.user.entity;
 
+import com.example.tablereservation.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,15 +12,12 @@ import java.util.Collection;
 import java.util.Collections;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "user")
-@Builder
-public class UserEntity implements UserDetails {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@SuperBuilder
+public class UserEntity extends BaseEntity implements UserDetails {
 
     @Column(unique = true)
     private String loginId;

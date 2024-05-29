@@ -2,6 +2,7 @@ package com.example.tablereservation.partner.dto;
 
 import com.example.tablereservation.partner.entity.PartnerEntity;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 public class RegisterPartner {
 
@@ -9,7 +10,7 @@ public class RegisterPartner {
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
-    @Builder
+    @SuperBuilder
     public static class Request {
         private Long id;
         private String loginId;
@@ -32,7 +33,7 @@ public class RegisterPartner {
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
-    @Builder
+    @SuperBuilder
     public static class Response {
         private Long id;
         private String loginId;

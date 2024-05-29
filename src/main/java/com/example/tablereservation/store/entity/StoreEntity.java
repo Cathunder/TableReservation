@@ -1,22 +1,18 @@
 package com.example.tablereservation.store.entity;
 
+import com.example.tablereservation.common.entity.BaseEntity;
 import com.example.tablereservation.partner.entity.PartnerEntity;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDateTime;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "store")
-@Builder
-public class StoreEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@SuperBuilder
+public class StoreEntity extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "partner_id")
@@ -26,7 +22,4 @@ public class StoreEntity {
     private String storeAddress;
     private String storePhone;
     private String storeIntroduction;
-
-    private LocalDateTime createDate;
-    private LocalDateTime updateDate;
 }

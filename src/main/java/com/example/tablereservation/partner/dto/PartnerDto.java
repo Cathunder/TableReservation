@@ -2,12 +2,13 @@ package com.example.tablereservation.partner.dto;
 
 import com.example.tablereservation.partner.entity.PartnerEntity;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class PartnerDto {
     private Long id;
     private String loginId;
