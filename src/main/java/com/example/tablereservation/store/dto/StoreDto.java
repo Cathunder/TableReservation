@@ -3,6 +3,8 @@ package com.example.tablereservation.store.dto;
 import com.example.tablereservation.store.entity.StoreEntity;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,6 +17,8 @@ public class StoreDto {
     private String storeAddress;
     private String storePhone;
     private String storeIntroduction;
+    private LocalDateTime createDate;
+    private LocalDateTime updateDate;
 
     public static StoreDto fromEntity(StoreEntity storeEntity) {
         return StoreDto.builder()
@@ -24,6 +28,8 @@ public class StoreDto {
                 .storeAddress(storeEntity.getStoreAddress())
                 .storePhone(storeEntity.getStorePhone())
                 .storeIntroduction(storeEntity.getStoreIntroduction())
+                .createDate(storeEntity.getCreateDate())
+                .updateDate(storeEntity.getUpdateDate())
                 .build();
     }
 }
