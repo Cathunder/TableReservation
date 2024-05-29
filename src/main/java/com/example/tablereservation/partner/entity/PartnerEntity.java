@@ -1,13 +1,16 @@
 package com.example.tablereservation.partner.entity;
 
+import com.example.tablereservation.store.entity.StoreEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -22,12 +25,13 @@ public class PartnerEntity implements UserDetails {
 
     @Column(unique = true)
     private String loginId;
-
     private String password;
 
     private String name;
-
     private String role;
+
+    @OneToMany(mappedBy = "partner")
+    private List<StoreEntity> stores = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

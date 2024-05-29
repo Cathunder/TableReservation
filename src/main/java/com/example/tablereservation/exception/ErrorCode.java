@@ -17,8 +17,10 @@ public enum ErrorCode {
     ID_NOT_EXIST("존재하지 않는 아이디입니다.", HttpStatus.UNAUTHORIZED.value()),
     PASSWORD_INCORRECT("비밀번호가 일치하지 않습니다.", HttpStatus.UNAUTHORIZED.value()),
 
-
-
+    // 상점
+    PARTNER_NOT_MATCHED("해당 상점에 대한 권한이 없습니다.", HttpStatus.FORBIDDEN.value()),
+    STORE_ALREADY_EXIST("이미 등록된 상점입니다.", HttpStatus.CONFLICT.value()),
+    NOT_PARTNER("파트너가 아닙니다.", HttpStatus.UNAUTHORIZED.value()),
     ;
 
     private final String description;
