@@ -17,7 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Slf4j
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
@@ -37,11 +37,7 @@ public class SecurityConfiguration {
                                 "/store/update/",
                                 "/store/delete/"
                         ).hasRole("PARTNER")
-                        .requestMatchers(
-                                "/partner/register", "/partner/login",
-                                "/user/login", "/user/register"
-                        ).permitAll()
-                        .anyRequest().authenticated())
+                        .anyRequest().permitAll())
                 .addFilterBefore(this.authenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
