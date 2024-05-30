@@ -4,6 +4,8 @@ import com.example.tablereservation.partner.entity.PartnerEntity;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,6 +17,8 @@ public class PartnerDto {
     private String password;
     private String name;
     private String role;
+    private LocalDateTime createdDate;
+    private LocalDateTime updatedDate;
 
     public static PartnerDto fromEntity(PartnerEntity partnerEntity) {
         return PartnerDto.builder()
@@ -23,6 +27,8 @@ public class PartnerDto {
                 .password(partnerEntity.getPassword())
                 .name(partnerEntity.getName())
                 .role(partnerEntity.getRole())
+                .createdDate(partnerEntity.getCreatedDate())
+                .updatedDate(partnerEntity.getUpdatedDate())
                 .build();
     }
 }

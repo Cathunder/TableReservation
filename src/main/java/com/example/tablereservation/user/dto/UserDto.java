@@ -4,6 +4,8 @@ import com.example.tablereservation.user.entity.UserEntity;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,6 +18,8 @@ public class UserDto {
     private String name;
     private String phone;
     private String role;
+    private LocalDateTime createdDate;
+    private LocalDateTime updatedDate;
 
     public static UserDto toEntity(UserEntity userEntity) {
         return UserDto.builder()
@@ -25,6 +29,8 @@ public class UserDto {
                 .name(userEntity.getName())
                 .phone(userEntity.getPhone())
                 .role(userEntity.getRole())
+                .createdDate(userEntity.getCreatedDate())
+                .updatedDate(userEntity.getUpdatedDate())
                 .build();
     }
 }
