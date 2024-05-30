@@ -1,11 +1,11 @@
 package com.example.tablereservation.security;
 
+import com.example.tablereservation.exception.ErrorCode;
+import com.example.tablereservation.exception.ReservationException;
 import com.example.tablereservation.partner.service.PartnerService;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -15,6 +15,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.Date;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class TokenProvider {
@@ -79,7 +80,7 @@ public class TokenProvider {
         try {
             return Jwts.parser().setSigningKey(this.secretKey).parseClaimsJws(token).getBody();
         } catch (ExpiredJwtException e) {
-            return e.getClaims();
+            throw new ReservationException(ErrorCode.TOKEN_WAS_EXPIRED);
         }
     }
 }

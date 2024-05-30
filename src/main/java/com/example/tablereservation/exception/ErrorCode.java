@@ -8,6 +8,9 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum ErrorCode {
 
+    // 토큰
+    TOKEN_WAS_EXPIRED("토큰이 만료되었습니다.", HttpStatus.UNAUTHORIZED.value()),
+
     // 파트너
     PARTNER_NOT_FOUND("해당 파트너를 찾지 못했습니다.", HttpStatus.BAD_REQUEST.value()),
 
