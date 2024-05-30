@@ -11,6 +11,8 @@ import com.example.tablereservation.store.entity.StoreEntity;
 import com.example.tablereservation.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -25,7 +27,7 @@ public class StoreService {
 
     /**
      * 상점 등록
-     * 1,2. 검증로직 진행
+     * 1,2. 검증로직 진행 - authenticate()
      * 3. 동일한 상점명이 존재하는지 검증
      * 4. 상점 등록
      */
@@ -42,10 +44,10 @@ public class StoreService {
 
     /**
      * 상점 정보 수정
-     * 1,2. 검증로직 진행
+     * 1,2. 검증로직 진행 - authenticate()
      * 3. 수정하려는 상점이 존재하는지 확인
      * 4. 이미 존재하는 상점명으로 수정했는지 확인
-     * 5. 상점 정보 수정 진행
+     * 5. 상점 정보 수정 진행 - update()
      */
     public StoreDto updateStore(UpdateStore.Request request, String loginId, Long storeId) {
         this.authenticate(loginId, request.getPartnerId());
@@ -73,7 +75,7 @@ public class StoreService {
     }
 
     /**
-     * 상점 정보 수정 진행
+     * update()
      */
     private void update(StoreEntity storeEntity, UpdateStore.Request request) {
         storeEntity.setStoreName(request.getStoreName());
@@ -84,7 +86,7 @@ public class StoreService {
     }
 
     /**
-     * 검증
+     * authenticate()
      * 1. 파트너 존재 여부 확인
      * 2. 요청으로 들어온 파트너 id와 현재 로그인된 파트너의 id가 같은지 확인
      */
@@ -97,5 +99,12 @@ public class StoreService {
         }
 
         return partnerEntity;
+    }
+
+    /**
+     * 상점 검색 (검색 조건없을 때)
+     */
+    public Page<StoreDto> findStore(Pageable pageable) {
+        return this.storeRepository.findAll(pageable).map(StoreDto::fromEntity);
     }
 }
