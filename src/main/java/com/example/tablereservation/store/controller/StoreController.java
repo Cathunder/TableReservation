@@ -33,7 +33,7 @@ public class StoreController {
     }
 
     /**
-     * 상점 수정
+     * 상점 정보 수정
      */
     @PreAuthorize("hasRole('PARTNER')")
     @PutMapping("/store/update/{storeId}")
@@ -43,5 +43,14 @@ public class StoreController {
         String loginId = principal.getName();
         StoreDto storeDto = this.storeService.updateStore(request, loginId, storeId);
         return ResponseEntity.ok(UpdateStore.Response.fromDto(storeDto));
+    }
+
+    /**
+     * 상점 삭제
+     */
+    @PreAuthorize("hasRole('PARTNER')")
+    @DeleteMapping("/store/delete/{storeId}")
+    public void deleteStore(@PathVariable("storeId") Long storeId) {
+        this.storeService.deleteStore(storeId);
     }
 }

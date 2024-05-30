@@ -45,7 +45,7 @@ public class StoreService {
      * 1,2. 검증로직 진행
      * 3. 수정하려는 상점이 존재하는지 확인
      * 4. 이미 존재하는 상점명으로 수정했는지 확인
-     * 5. 상점 정보 업데이트
+     * 5. 상점 정보 수정 진행
      */
     public StoreDto updateStore(UpdateStore.Request request, String loginId, Long storeId) {
         this.authenticate(loginId, request.getPartnerId());
@@ -64,7 +64,16 @@ public class StoreService {
     }
 
     /**
-     * 상점 정보 업데이트
+     * 상점 삭제
+     */
+    public void deleteStore(Long storeId) {
+        StoreEntity storeEntity = this.storeRepository.findById(storeId)
+                .orElseThrow(() -> new ReservationException(ErrorCode.STORE_NOT_EXIST));
+        storeRepository.delete(storeEntity);
+    }
+
+    /**
+     * 상점 정보 수정 진행
      */
     private void update(StoreEntity storeEntity, UpdateStore.Request request) {
         storeEntity.setStoreName(request.getStoreName());

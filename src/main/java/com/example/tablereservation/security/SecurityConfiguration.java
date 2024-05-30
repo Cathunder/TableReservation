@@ -34,7 +34,8 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/store/add",
-                                "/store/update/"
+                                "/store/update/",
+                                "/store/delete/"
                         ).hasRole("PARTNER")
                         .requestMatchers(
                                 "/partner/register", "/partner/login",
