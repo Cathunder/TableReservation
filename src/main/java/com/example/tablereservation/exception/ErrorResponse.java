@@ -1,8 +1,8 @@
 package com.example.tablereservation.exception;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
+@AllArgsConstructor
 @Data
 @Builder
 public class ErrorResponse {
