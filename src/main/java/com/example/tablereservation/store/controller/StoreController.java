@@ -67,7 +67,6 @@ public class StoreController {
             @RequestParam(value = "searchType", defaultValue = "ALL") SearchType searchType,
             @RequestBody SearchStore.Request request
     ) {
-        //Specification로 수정하기
         Pageable pageable = Pageable.ofSize(pageSize);
         Page<StoreDto> storeList = this.storeService.findStore(pageable, searchType, request);
         Page<SearchStore.Response> response = storeList.map(SearchStore.Response::fromDto);
