@@ -3,6 +3,7 @@ package com.example.tablereservation.security;
 import com.example.tablereservation.exception.ErrorCode;
 import com.example.tablereservation.exception.ReservationException;
 import com.example.tablereservation.partner.service.PartnerService;
+import com.example.tablereservation.user.service.UserService;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,7 @@ public class TokenProvider {
     private static final String KEY_ROLE = "role";
     private static final long KEY_EXPIRE_TIME = 1000 * 60 * 60; // 1시간
 
+    private final UserService userService;
     private final PartnerService partnerService;
 
     @Value("${spring.jwt.secret}")
@@ -47,10 +49,20 @@ public class TokenProvider {
     }
 
     /**
-     * 토큰에서 인증정보 가져오기
+     * 토큰에서 ROLE에 따른 인증정보 가져오기
      */
     public Authentication getAuthentication(String jwt) {
-        UserDetails userDetails = this.partnerService.loadUserByUsername(this.getUsername(jwt));
+        String role = this.getUserRole(jwt);
+        UserDetails userDetails;
+
+        if ("ROLE_USER".equals(role)) {
+            userDetails = this.userService.loadUserByUsername(this.getUsername(jwt));
+        } else if ("ROLE_PARTNER".equals(role)) {
+            userDetails = this.partnerService.loadUserByUsername(this.getUsername(jwt));
+        } else {
+            throw new ReservationException(ErrorCode.UNKNOWN_ROLE);
+        }
+
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
 
@@ -59,6 +71,13 @@ public class TokenProvider {
      */
     public String getUsername(String token) {
         return this.parseClaims(token).getSubject();
+    }
+
+    /**
+     * 토큰에서 role 가져오기
+     */
+    public String getUserRole(String token) {
+        return this.parseClaims(token).getOrDefault(KEY_ROLE, String.class).toString();
     }
 
     /**
