@@ -2,7 +2,6 @@ package com.example.tablereservation.partner.dto;
 
 import com.example.tablereservation.partner.entity.PartnerEntity;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
@@ -12,7 +11,7 @@ public class RegisterPartner {
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
-    @SuperBuilder
+    @Builder
     public static class Request {
         private Long id;
         private String loginId;
@@ -39,7 +38,7 @@ public class RegisterPartner {
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
-    @SuperBuilder
+    @Builder
     public static class Response {
         private Long id;
         private String loginId;

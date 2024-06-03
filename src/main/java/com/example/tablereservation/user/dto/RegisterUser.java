@@ -2,7 +2,6 @@ package com.example.tablereservation.user.dto;
 
 import com.example.tablereservation.user.entity.UserEntity;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
@@ -12,7 +11,7 @@ public class RegisterUser {
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
-    @SuperBuilder
+    @Builder
     public static class Request {
         private Long id;
         private String loginId;
@@ -41,7 +40,7 @@ public class RegisterUser {
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
-    @SuperBuilder
+    @Builder
     public static class Response {
         private Long id;
         private String loginId;

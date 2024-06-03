@@ -2,7 +2,6 @@ package com.example.tablereservation.user.dto;
 
 import com.example.tablereservation.user.entity.UserEntity;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
@@ -10,7 +9,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
+@Builder
 public class UserDto {
     private Long id;
     private String loginId;
