@@ -4,7 +4,6 @@ import com.example.tablereservation.partner.entity.PartnerEntity;
 import com.example.tablereservation.store.entity.StoreEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
@@ -14,7 +13,6 @@ public class AddStore {
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
-    @SuperBuilder
     public static class Request {
         private Long partnerId;
         private String storeName;
@@ -37,7 +35,7 @@ public class AddStore {
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
-    @SuperBuilder
+    @Builder
     public static class Response {
         private Long partnerId;
         private String storeName;

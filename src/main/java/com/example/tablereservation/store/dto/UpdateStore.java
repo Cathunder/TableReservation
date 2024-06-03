@@ -1,7 +1,6 @@
 package com.example.tablereservation.store.dto;
 
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
@@ -11,7 +10,6 @@ public class UpdateStore {
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
-    @SuperBuilder
     public static class Request {
         private Long partnerId;
         private String storeName;
@@ -24,7 +22,7 @@ public class UpdateStore {
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
-    @SuperBuilder
+    @Builder
     public static class Response {
         private String storeName;
         private String storeAddress;

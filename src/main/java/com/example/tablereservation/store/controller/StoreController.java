@@ -1,9 +1,11 @@
 package com.example.tablereservation.store.controller;
 
 import com.example.tablereservation.store.dto.AddStore;
+import com.example.tablereservation.store.dto.SearchStore;
 import com.example.tablereservation.store.dto.StoreDto;
 import com.example.tablereservation.store.dto.UpdateStore;
 import com.example.tablereservation.store.service.StoreService;
+import com.example.tablereservation.store.type.SearchType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -57,11 +59,18 @@ public class StoreController {
     }
 
     /**
-     * 상점 검색 (검색 조건없을 때)
+     * 상점 검색
      */
     @GetMapping("/store/list")
-    public ResponseEntity<?> findAll(final Pageable pageable) {
-        Page<StoreDto> storeList = this.storeService.findStore(pageable);
-        return ResponseEntity.ok(storeList);
+    public ResponseEntity<?> findStore(
+            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+            @RequestParam(value = "searchType", defaultValue = "ALL") SearchType searchType,
+            @RequestBody SearchStore.Request request
+    ) {
+        //Specification로 수정하기
+        Pageable pageable = Pageable.ofSize(pageSize);
+        Page<StoreDto> storeList = this.storeService.findStore(pageable, searchType, request);
+        Page<SearchStore.Response> response = storeList.map(SearchStore.Response::fromDto);
+        return ResponseEntity.ok(response);
     }
 }

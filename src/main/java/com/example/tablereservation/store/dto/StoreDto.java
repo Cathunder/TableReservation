@@ -3,7 +3,6 @@ package com.example.tablereservation.store.dto;
 import com.example.tablereservation.store.entity.StoreEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
@@ -11,7 +10,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
+@Builder
 public class StoreDto {
     private Long id;
     private Long partnerId;

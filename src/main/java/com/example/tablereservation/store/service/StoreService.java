@@ -5,10 +5,12 @@ import com.example.tablereservation.exception.ReservationException;
 import com.example.tablereservation.partner.entity.PartnerEntity;
 import com.example.tablereservation.partner.repository.PartnerRepository;
 import com.example.tablereservation.store.dto.AddStore;
+import com.example.tablereservation.store.dto.SearchStore;
 import com.example.tablereservation.store.dto.StoreDto;
 import com.example.tablereservation.store.dto.UpdateStore;
 import com.example.tablereservation.store.entity.StoreEntity;
 import com.example.tablereservation.store.repository.StoreRepository;
+import com.example.tablereservation.store.type.SearchType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -102,9 +104,38 @@ public class StoreService {
     }
 
     /**
-     * 상점 검색 (검색 조건없을 때)
+     * 상점 검색
+     * 1. 검색타입 설정x(기본값: ALL) or ALL로 설정
+     * - 검색내용이 있으면 상점이름 또는 주소에 해당 검색내용이 포함된 모든 상점들을 가져옴
+     * - 검색내용이 없으면 모든 상점들을 가져옴
+     * 2. 상점이름으로 검색
+     * 3. 상점주소로 검색
      */
-    public Page<StoreDto> findStore(Pageable pageable) {
+    public Page<StoreDto> findStore(Pageable pageable, SearchType searchType, SearchStore.Request request) {
+        String searchContents = request.getSearchContents();
+
+        if (searchType == SearchType.ALL) {
+            if (!searchContents.isBlank()) {
+                return this.storeRepository
+                        .findAllByStoreNameContainingOrStoreAddressContaining(
+                                pageable,
+                                searchContents,
+                                searchContents
+                        )
+                        .map(StoreDto::fromEntity);
+            }
+        }
+
+        if (searchType == SearchType.NAME) {
+            return this.storeRepository
+                    .findAllByStoreNameContaining(pageable, searchContents).map(StoreDto::fromEntity);
+        }
+
+        if (searchType == SearchType.ADDRESS) {
+            return this.storeRepository
+                    .findAllByStoreAddressContaining(pageable, searchContents).map(StoreDto::fromEntity);
+        }
+
         return this.storeRepository.findAll(pageable).map(StoreDto::fromEntity);
     }
 }
