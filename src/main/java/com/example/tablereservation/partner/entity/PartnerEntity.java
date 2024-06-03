@@ -28,7 +28,7 @@ public class PartnerEntity extends BaseEntity implements UserDetails {
     private String name;
     private String role;
 
-    @OneToMany(mappedBy = "partner")
+    @OneToMany(mappedBy = "partner", fetch = FetchType.LAZY)
     private List<StoreEntity> stores = new ArrayList<>();
 
     @Override
