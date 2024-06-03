@@ -1,4 +1,4 @@
-package com.example.tablereservation.store.type;
+package com.example.tablereservation.common.type;
 
 public enum SearchType {
     ALL,
