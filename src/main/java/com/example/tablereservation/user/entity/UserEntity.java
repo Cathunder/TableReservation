@@ -1,6 +1,7 @@
 package com.example.tablereservation.user.entity;
 
 import com.example.tablereservation.common.entity.BaseEntity;
+import com.example.tablereservation.reservation.entity.ReservationEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -8,8 +9,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @Getter
 @Setter
@@ -27,6 +30,9 @@ public class UserEntity extends BaseEntity implements UserDetails {
     private String phone;
 
     private String role;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<ReservationEntity> reservations = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
