@@ -33,6 +33,7 @@ public class RegisterReservationDto {
     @Builder
     public static class Response {
         private Long storeId;
+        private String storeName;
         private String username;
         private Integer people;
         private ReservationStatus status;
@@ -43,6 +44,7 @@ public class RegisterReservationDto {
         public static Response fromDto(ReservationDto reservationDto) {
             return Response.builder()
                     .storeId(reservationDto.getStoreId())
+                    .storeName(reservationDto.getStoreName())
                     .username(reservationDto.getUsername())
                     .people(reservationDto.getPeople())
                     .status(reservationDto.getStatus())

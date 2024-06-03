@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 public class ReservationDto {
     private Long id;
     private Long storeId;
+    private String storeName;
     private String username;
     private Integer people;
     private ReservationStatus status;
@@ -26,6 +27,7 @@ public class ReservationDto {
         return ReservationDto.builder()
                 .id(reservationEntity.getId())
                 .storeId(reservationEntity.getStore().getId())
+                .storeName(reservationEntity.getStore().getStoreName())
                 .username(reservationEntity.getUsername())
                 .people(reservationEntity.getPeople())
                 .status(reservationEntity.getStatus())
