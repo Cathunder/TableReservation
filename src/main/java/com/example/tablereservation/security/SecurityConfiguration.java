@@ -37,6 +37,9 @@ public class SecurityConfiguration {
                                 "/store/update/",
                                 "/store/delete/"
                         ).hasRole("PARTNER")
+                        .requestMatchers(
+                                "/reservation/register"
+                        ).hasRole("USER")
                         .anyRequest().permitAll())
                 .addFilterBefore(this.authenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
