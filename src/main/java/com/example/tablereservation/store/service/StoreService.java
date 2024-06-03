@@ -10,7 +10,7 @@ import com.example.tablereservation.store.dto.StoreDto;
 import com.example.tablereservation.store.dto.UpdateStore;
 import com.example.tablereservation.store.entity.StoreEntity;
 import com.example.tablereservation.store.repository.StoreRepository;
-import com.example.tablereservation.store.type.SearchType;
+import com.example.tablereservation.common.type.SearchType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
