@@ -3,6 +3,7 @@ package com.example.tablereservation.reservation.controller;
 import com.example.tablereservation.reservation.dto.RegisterReservationDto;
 import com.example.tablereservation.reservation.dto.ReservationDto;
 import com.example.tablereservation.reservation.service.ReservationService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class ReservationController {
     @PreAuthorize("hasRole('USER')")
     @PostMapping("/reservation/register")
     public ResponseEntity<?> register(
-            @RequestBody RegisterReservationDto.Request request,
+            @RequestBody @Valid RegisterReservationDto.Request request,
             Principal principal
     ) {
         String loginId = principal.getName();

@@ -2,6 +2,7 @@ package com.example.tablereservation.reservation.dto;
 
 import com.example.tablereservation.common.type.ReservationStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.Min;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -18,11 +19,13 @@ public class RegisterReservationDto {
         private Long storeId;
 
         private String loginId;
+
+        @Min(0)
         private Integer people;
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         private LocalDate date;
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH")
         private LocalTime time;
     }
 
