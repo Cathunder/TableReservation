@@ -37,6 +37,6 @@ public class ReservationEntity extends BaseEntity {
     private Integer people;
     private ReservationStatus status;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
-    private LocalDateTime reservationDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH")
+    private LocalDateTime reservationDateTime;
 }

@@ -41,8 +41,8 @@ public class RegisterReservationDto {
         private Integer people;
         private ReservationStatus status;
 
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
-        private LocalDateTime reservationDate;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH")
+        private LocalDateTime reservationDateTime;
 
         public static Response fromDto(ReservationDto reservationDto) {
             return Response.builder()
@@ -51,7 +51,7 @@ public class RegisterReservationDto {
                     .username(reservationDto.getUsername())
                     .people(reservationDto.getPeople())
                     .status(reservationDto.getStatus())
-                    .reservationDate(reservationDto.getReservationDate())
+                    .reservationDateTime(reservationDto.getReservationDateTime())
                     .build();
         }
     }
