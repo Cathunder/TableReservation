@@ -30,6 +30,7 @@ public enum ErrorCode {
 
     // 예약
     USER_INCORRECT("유저정보가 일치하지 않습니다.", HttpStatus.UNAUTHORIZED.value()),
+    RESERVATION_ALREADY_EXIST("해당 시간에 이미 예약이 존재합니다.", HttpStatus.CONFLICT.value()),
     ;
 
     private final String description;

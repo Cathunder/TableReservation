@@ -12,10 +12,14 @@ import com.example.tablereservation.store.repository.StoreRepository;
 import com.example.tablereservation.user.entity.UserEntity;
 import com.example.tablereservation.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ReservationService {
@@ -27,10 +31,13 @@ public class ReservationService {
     /**
      * 예약 등록
      * 1. getReservationEntity()
-     * 2. 현재 로그인된 아이디와 요청을 보낸 로그인 아이디가 동일한지 확인
+     * 2. canReservation()
+     * 3. 현재 로그인된 아이디와 요청을 보낸 로그인 아이디가 동일한지 확인
+     * 4. 예약 생성
      */
     public ReservationDto register(RegisterReservationDto.Request request, String loginId) {
-        ReservationEntity reservationEntity = getReservationEntity(request);
+        ReservationEntity reservationEntity = createReservationEntity(request);
+        canReservation(request);
 
         if (!loginId.equals(request.getLoginId())) {
             throw new ReservationException(ErrorCode.USER_INCORRECT);
@@ -41,11 +48,12 @@ public class ReservationService {
     }
 
     /**
-     * getReservationEntity()
-     * 1. 요청의 상점아이디 및 로그인아이디로 해당 상점 및 유저가 존재하는지 확인
-     * 2. 예약시간을 저장하고 엔티티를 반환
+     * getReservationEntity() - reservationEntity 생성
+     * 1. 요청으로 들어온 상점아이디 및 로그인아이디로 해당 상점 및 유저가 존재하는지 확인
+     * 2. 엔티티에 예약시간을 저장
+     * 3. 엔티티 반환
      */
-    private ReservationEntity getReservationEntity(RegisterReservationDto.Request request) {
+    private ReservationEntity createReservationEntity(RegisterReservationDto.Request request) {
         StoreEntity storeEntity = this.storeRepository.findById(request.getStoreId())
                 .orElseThrow(() -> new ReservationException(ErrorCode.STORE_NOT_EXIST));
 
@@ -60,7 +68,22 @@ public class ReservationService {
                 .username(userEntity.getName())
                 .people(request.getPeople())
                 .status(ReservationStatus.REQUEST)
-                .reservationDate(localDateTime)
+                .reservationDateTime(localDateTime)
                 .build();
+    }
+
+    /**
+     * canReservation() - 예약 가능 여부 확인
+     * 1. 예약하려는 매장에 동일한 시간대의 예약이 존재하는지 확인
+     */
+    private void canReservation(RegisterReservationDto.Request request) {
+        LocalDate date = request.getDate();
+        LocalTime time = request.getTime();
+        LocalDateTime reservationDateTime = LocalDateTime.of(date, time);
+
+        boolean isExist = this.reservationRepository.existsByStoreIdAndReservationDateTime(request.getStoreId(), reservationDateTime);
+        if (isExist) {
+            throw new ReservationException(ErrorCode.RESERVATION_ALREADY_EXIST);
+        }
     }
 }
