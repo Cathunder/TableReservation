@@ -56,7 +56,7 @@ public class ReservationController {
     }
 
     /**
-     * 도착 확인 - 키오스크에서 로그인 후 도착확인 진행
+     * 매장 도착 확인 - 키오스크에서 로그인 후 도착확인 진행
      */
     @PreAuthorize("hasRole('USER')")
     @PutMapping("reservation/arrived")
