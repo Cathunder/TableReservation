@@ -69,7 +69,6 @@ public class ReservationService {
         return ReservationEntity.builder()
                 .user(userEntity)
                 .store(storeEntity)
-                .username(userEntity.getName())
                 .people(request.getPeople())
                 .status(ReservationStatus.REQUEST)
                 .reservationDateTime(localDateTime)
@@ -132,6 +131,31 @@ public class ReservationService {
 
         reservationEntity.setStatus(ReservationStatus.REFUSE);
         this.reservationRepository.save(reservationEntity);
+        return ReservationDto.fromEntity(reservationEntity);
+    }
+
+    /**
+     * 도착 확인
+     * 1. 예약 및 유저가 존재하는지 확인
+     * 2. 예약시간 10분전 시도했는지 확인
+     * 3. 10분 사이에 시도했다면 예약상태를 변경
+     */
+    public ReservationDto arrived(Long reservationId, UserEntity userDto) {
+        ReservationEntity reservationEntity = this.reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new ReservationException(ErrorCode.RESERVATION_NOT_EXIST));
+        this.userRepository.findById(userDto.getId())
+                .orElseThrow(() -> new ReservationException(ErrorCode.USER_NOT_FOUND));
+
+        LocalDateTime reservationDateTime = reservationEntity.getReservationDateTime();
+        LocalDateTime now = LocalDateTime.now();
+
+        if (now.isAfter(reservationDateTime.minusMinutes(10)) && now.isBefore(reservationDateTime)) {
+            reservationEntity.setStatus(ReservationStatus.ARRIVED);
+            this.reservationRepository.save(reservationEntity);
+        } else {
+            throw new ReservationException(ErrorCode.CAN_ARRIVED_CONFIRM_BEFORE_10MIN);
+        }
+
         return ReservationDto.fromEntity(reservationEntity);
     }
 }

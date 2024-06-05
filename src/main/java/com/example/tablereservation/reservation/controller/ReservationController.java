@@ -3,11 +3,13 @@ package com.example.tablereservation.reservation.controller;
 import com.example.tablereservation.reservation.dto.RegisterReservationDto;
 import com.example.tablereservation.reservation.dto.ReservationDto;
 import com.example.tablereservation.reservation.service.ReservationService;
+import com.example.tablereservation.user.entity.UserEntity;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -20,7 +22,7 @@ public class ReservationController {
     private final ReservationService reservationService;
 
     /**
-     * 예약하기
+     * 예약 등록
      */
     @PreAuthorize("hasRole('USER')")
     @PostMapping("/reservation/register")
@@ -50,6 +52,19 @@ public class ReservationController {
     @PutMapping("/reservation/refuse")
     public ResponseEntity<?> refuse(@RequestParam(value = "reservationId") Long reservationId) {
         ReservationDto reservationDto = this.reservationService.refuse(reservationId);
+        return ResponseEntity.ok(reservationDto);
+    }
+
+    /**
+     * 도착 확인 - 키오스크에서 로그인 후 도착확인 진행
+     */
+    @PreAuthorize("hasRole('USER')")
+    @PutMapping("reservation/arrived")
+    public ResponseEntity<?> arrived(
+        @RequestParam(value = "reservationId") Long reservationId,
+        @AuthenticationPrincipal UserEntity userEntity
+    ) {
+        ReservationDto reservationDto = this.reservationService.arrived(reservationId, userEntity);
         return ResponseEntity.ok(reservationDto);
     }
 }
