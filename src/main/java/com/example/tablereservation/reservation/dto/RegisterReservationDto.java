@@ -38,6 +38,7 @@ public class RegisterReservationDto {
         private Long storeId;
         private String storeName;
         private String username;
+        private String userPhone;
         private Integer people;
         private ReservationStatus status;
 
@@ -49,6 +50,7 @@ public class RegisterReservationDto {
                     .storeId(reservationDto.getStoreId())
                     .storeName(reservationDto.getStoreName())
                     .username(reservationDto.getUsername())
+                    .userPhone(reservationDto.getUserPhone())
                     .people(reservationDto.getPeople())
                     .status(reservationDto.getStatus())
                     .reservationDateTime(reservationDto.getReservationDateTime())

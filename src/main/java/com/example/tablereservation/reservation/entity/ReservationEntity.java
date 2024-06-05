@@ -33,7 +33,6 @@ public class ReservationEntity extends BaseEntity {
     @JoinColumn(name = "store_id")
     private StoreEntity store;
 
-    private String username;
     private Integer people;
     private ReservationStatus status;
 

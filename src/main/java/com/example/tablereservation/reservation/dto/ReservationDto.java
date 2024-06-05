@@ -17,6 +17,7 @@ public class ReservationDto {
     private Long storeId;
     private String storeName;
     private String username;
+    private String userPhone;
     private Integer people;
     private ReservationStatus status;
 
@@ -28,7 +29,8 @@ public class ReservationDto {
                 .id(reservationEntity.getId())
                 .storeId(reservationEntity.getStore().getId())
                 .storeName(reservationEntity.getStore().getStoreName())
-                .username(reservationEntity.getUsername())
+                .username(reservationEntity.getUser().getName())
+                .userPhone(reservationEntity.getUser().getPhone())
                 .people(reservationEntity.getPeople())
                 .status(reservationEntity.getStatus())
                 .reservationDateTime(reservationEntity.getReservationDateTime())
