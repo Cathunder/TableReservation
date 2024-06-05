@@ -36,9 +36,20 @@ public class ReservationController {
     /**
      * 예약 승인
      */
+    @PreAuthorize("hasRole('PARTNER')")
     @PutMapping("/reservation/approve")
     public ResponseEntity<?> approve(@RequestParam(value = "reservationId") Long reservationId) {
         ReservationDto reservationDto = this.reservationService.approve(reservationId);
+        return ResponseEntity.ok(reservationDto);
+    }
+
+    /**
+     * 예약 거절
+     */
+    @PreAuthorize("hasRole('PARTNER')")
+    @PutMapping("/reservation/refuse")
+    public ResponseEntity<?> refuse(@RequestParam(value = "reservationId") Long reservationId) {
+        ReservationDto reservationDto = this.reservationService.refuse(reservationId);
         return ResponseEntity.ok(reservationDto);
     }
 }

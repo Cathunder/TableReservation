@@ -110,14 +110,28 @@ public class ReservationService {
     /**
      * 예약 승인
      * 1. 예약이 존재하는지 확인
-     * 2. 예약시간이 예약을 승인하려는 시간보다 이전이면
+     * 2. 예약 상태를 승인으로 변경
      */
     public ReservationDto approve(Long reservationId) {
         ReservationEntity reservationEntity = this.reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new ReservationException(ErrorCode.RESERVATION_NOT_EXIST));
 
-
         reservationEntity.setStatus(ReservationStatus.APPROVE);
+        this.reservationRepository.save(reservationEntity);
+        return ReservationDto.fromEntity(reservationEntity);
+    }
+
+    /**
+     * 예약 거절
+     * 1. 예약이 존재하는지 확인
+     * 2. 예약 상태를 거절로 변경
+     */
+    public ReservationDto refuse(Long reservationId) {
+        ReservationEntity reservationEntity = this.reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new ReservationException(ErrorCode.RESERVATION_NOT_EXIST));
+
+        reservationEntity.setStatus(ReservationStatus.REFUSE);
+        this.reservationRepository.save(reservationEntity);
         return ReservationDto.fromEntity(reservationEntity);
     }
 }
