@@ -158,4 +158,22 @@ public class ReservationService {
 
         return ReservationDto.fromEntity(reservationEntity);
     }
+
+    /**
+     * 매장 사용 완료
+     * 1. 예약이 존재하는지 확인
+     * 2. 예약이 ARRIVED 상태인 경우만 COMPLETE로 처리 가능
+     */
+    public ReservationDto complete(Long reservationId) {
+        ReservationEntity reservationEntity = this.reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new ReservationException(ErrorCode.RESERVATION_NOT_EXIST));
+
+        if(reservationEntity.getStatus() != ReservationStatus.ARRIVED) {
+            throw new ReservationException(ErrorCode.CANNOT_SET_STATUS_COMPLETE);
+        }
+
+        reservationEntity.setStatus(ReservationStatus.COMPLETE);
+        this.reservationRepository.save(reservationEntity);
+        return ReservationDto.fromEntity(reservationEntity);
+    }
 }

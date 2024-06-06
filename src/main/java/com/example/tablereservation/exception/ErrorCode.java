@@ -34,6 +34,7 @@ public enum ErrorCode {
     RESERVATION_NOT_EXIST("예약이 존재하지 않습니다.", HttpStatus.UNAUTHORIZED.value()),
     CANNOT_RESERVATION_BEFORE_1HOUR("1시간 전에는 예약을 할 수 없습니다.", HttpStatus.BAD_REQUEST.value()),
     CAN_ARRIVED_CONFIRM_BEFORE_10MIN("예약시간 10분전부터 도착확인이 가능합니다.", HttpStatus.BAD_REQUEST.value()),
+    CANNOT_SET_STATUS_COMPLETE("도착이 확인된 예약건만 완료처리를 할 수 있습니다.", HttpStatus.BAD_REQUEST.value()),
     ;
 
     private final String description;

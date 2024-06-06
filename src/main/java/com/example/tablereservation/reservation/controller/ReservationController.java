@@ -67,4 +67,14 @@ public class ReservationController {
         ReservationDto reservationDto = this.reservationService.arrived(reservationId, userEntity);
         return ResponseEntity.ok(reservationDto);
     }
+
+    /**
+     * 매장 사용 완료
+     */
+    @PreAuthorize("hasRole('PARTNER')")
+    @PutMapping("reservation/complete")
+    public ResponseEntity<?> complete(@RequestParam(value = "reservationId") Long reservationId) {
+        ReservationDto reservationDto = this.reservationService.complete(reservationId);
+        return ResponseEntity.ok(reservationDto);
+    }
 }
