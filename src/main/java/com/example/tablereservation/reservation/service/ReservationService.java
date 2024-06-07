@@ -44,7 +44,7 @@ public class ReservationService {
                 .orElseThrow(() -> new ReservationException(ErrorCode.ID_NOT_EXIST));
 
         if (!loginId.equals(request.getLoginId())) {
-            throw new ReservationException(ErrorCode.USER_INCORRECT);
+            throw new ReservationException(ErrorCode.INCORRECT_USER);
         }
 
         checkAlreadyExist(request);

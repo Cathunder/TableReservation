@@ -21,6 +21,7 @@ public enum ErrorCode {
     ID_NOT_EXIST("존재하지 않는 아이디입니다.", HttpStatus.UNAUTHORIZED.value()),
     PASSWORD_INCORRECT("비밀번호가 일치하지 않습니다.", HttpStatus.UNAUTHORIZED.value()),
     INVALID_REQUEST("잘못된 요청입니다.", HttpStatus.BAD_REQUEST.value()),
+    INCORRECT_USER("유저정보가 일치하지 않습니다.", HttpStatus.UNAUTHORIZED.value()),
 
     // 상점
     PARTNER_NOT_MATCHED("해당 상점에 대한 권한이 없습니다.", HttpStatus.FORBIDDEN.value()),
@@ -29,12 +30,14 @@ public enum ErrorCode {
     NOT_PARTNER("파트너가 아닙니다.", HttpStatus.UNAUTHORIZED.value()),
 
     // 예약
-    USER_INCORRECT("유저정보가 일치하지 않습니다.", HttpStatus.UNAUTHORIZED.value()),
     RESERVATION_ALREADY_EXIST("해당 시간에 이미 예약이 존재합니다.", HttpStatus.CONFLICT.value()),
     RESERVATION_NOT_EXIST("예약이 존재하지 않습니다.", HttpStatus.UNAUTHORIZED.value()),
     CANNOT_RESERVATION_BEFORE_1HOUR("1시간 전에는 예약을 할 수 없습니다.", HttpStatus.BAD_REQUEST.value()),
     CAN_ARRIVED_CONFIRM_BEFORE_10MIN("예약시간 10분전부터 도착확인이 가능합니다.", HttpStatus.BAD_REQUEST.value()),
     CANNOT_SET_STATUS_COMPLETE("도착이 확인된 예약건만 완료처리를 할 수 있습니다.", HttpStatus.BAD_REQUEST.value()),
+
+    // 리뷰
+    RESERVATION_STATUS_NOT_COMPLETE("이용완료된 예약건에 대해서만 리뷰를 작성할 수 있습니다.", HttpStatus.BAD_REQUEST.value()),
     ;
 
     private final String description;
