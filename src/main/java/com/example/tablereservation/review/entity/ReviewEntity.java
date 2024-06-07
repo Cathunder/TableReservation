@@ -1,9 +1,10 @@
 package com.example.tablereservation.review.entity;
 
 import com.example.tablereservation.common.entity.BaseEntity;
-import jakarta.persistence.Entity;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
+import com.example.tablereservation.reservation.entity.ReservationEntity;
+import com.example.tablereservation.store.entity.StoreEntity;
+import com.example.tablereservation.user.entity.UserEntity;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,8 +20,17 @@ import lombok.experimental.SuperBuilder;
 public class ReviewEntity extends BaseEntity {
 
     private String contents;
-
-    @Min(0)
-    @Max(5)
     private Integer rating;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "store_id")
+    private StoreEntity store;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reservation_id")
+    private ReservationEntity reservation;
 }
