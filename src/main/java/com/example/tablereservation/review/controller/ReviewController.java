@@ -71,6 +71,6 @@ public class ReviewController {
             throw new ReservationException(ErrorCode.UNAUTHORIZED);
         }
 
-        return ResponseEntity.ok("review_id: " + reviewId + " 삭제완료");
+        return ResponseEntity.ok("review_id: " + reviewId + " -> 삭제완료");
     }
 }
