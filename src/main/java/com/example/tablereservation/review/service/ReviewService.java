@@ -3,6 +3,7 @@ package com.example.tablereservation.review.service;
 import com.example.tablereservation.common.type.ReservationStatus;
 import com.example.tablereservation.exception.ErrorCode;
 import com.example.tablereservation.exception.ReservationException;
+import com.example.tablereservation.partner.entity.PartnerEntity;
 import com.example.tablereservation.reservation.entity.ReservationEntity;
 import com.example.tablereservation.reservation.repository.ReservationRepository;
 import com.example.tablereservation.review.dto.RegisterReviewDto;
@@ -10,6 +11,7 @@ import com.example.tablereservation.review.dto.ReviewDto;
 import com.example.tablereservation.review.dto.UpdateReviewDto;
 import com.example.tablereservation.review.entity.ReviewEntity;
 import com.example.tablereservation.review.repository.ReviewRepository;
+import com.example.tablereservation.store.entity.StoreEntity;
 import com.example.tablereservation.user.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -69,7 +71,7 @@ public class ReviewService {
      * 리뷰수정
      * 1. 리뷰가 존재하는지 확인
      * 2. 리뷰의 최초 작성자와 리뷰를 수정하려는 사람이 동일한지 확인
-     * 3. 수정하려는 리뷰정보의 존재유무에 따라 리뷰정보를 수정
+     * 3. 수정하려는 리뷰정보의 존재유무에 따라 리뷰정보를 수정 (수정하지 않은 정보는 그대로 유지하기 위함)
      */
     public ReviewDto update(Long reviewId, UpdateReviewDto.Request request, UserEntity userEntity) {
         ReviewEntity reviewEntity = this.reviewRepository.findById(reviewId)
@@ -89,5 +91,38 @@ public class ReviewService {
 
         ReviewEntity resultEntity = this.reviewRepository.save(reviewEntity);
         return ReviewDto.fromEntity(resultEntity);
+    }
+
+    /**
+     * 리뷰삭제 (점주)
+     * 1. 리뷰가 존재하는지 확인
+     * 2. 해당 리뷰가 파트너 매장의 리뷰인지 확인
+     */
+    public void deleteByPartner(Long reviewId, PartnerEntity partnerEntity) {
+        ReviewEntity reviewEntity = this.reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new ReservationException(ErrorCode.REVIEW_NOT_EXIST));
+
+        StoreEntity storeEntity = reviewEntity.getStore();
+        if (!storeEntity.getPartner().getId().equals(partnerEntity.getId())) {
+            throw new ReservationException(ErrorCode.UNAUTHORIZED);
+        }
+
+        this.reviewRepository.delete(reviewEntity);
+    }
+
+    /**
+     * 리뷰삭제 (유저)
+     * 1. 리뷰가 존재하는지 확인
+     * 2. 리뷰의 최초 작성자와 리뷰를 삭제하려는 사람이 동일한지 확인
+     */
+    public void deleteByUser(Long reviewId, UserEntity userEntity) {
+        ReviewEntity reviewEntity = this.reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new ReservationException(ErrorCode.REVIEW_NOT_EXIST));
+
+        if (!reviewEntity.getUser().getId().equals(userEntity.getId())) {
+            throw new ReservationException(ErrorCode.INCORRECT_USER);
+        }
+
+        this.reviewRepository.delete(reviewEntity);
     }
 }

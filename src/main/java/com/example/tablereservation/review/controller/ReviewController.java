@@ -1,5 +1,9 @@
 package com.example.tablereservation.review.controller;
 
+import com.example.tablereservation.common.entity.BaseEntity;
+import com.example.tablereservation.exception.ErrorCode;
+import com.example.tablereservation.exception.ReservationException;
+import com.example.tablereservation.partner.entity.PartnerEntity;
 import com.example.tablereservation.review.dto.RegisterReviewDto;
 import com.example.tablereservation.review.dto.ReviewDto;
 import com.example.tablereservation.review.dto.UpdateReviewDto;
@@ -45,5 +49,28 @@ public class ReviewController {
     ) {
         ReviewDto reviewDto = this.reviewService.update(reviewId, request, userEntity);
         return ResponseEntity.ok(UpdateReviewDto.Response.fromDto(reviewDto));
+    }
+
+    /**
+     * 리뷰삭제
+     * 1. 현재 계정이 고객인지 점주인지 확인 후 그에 맞는 로직을 실행
+     */
+    @PreAuthorize("hasAnyRole('USER', 'PARTNER')")
+    @DeleteMapping("review/delete/{reviewId}")
+    public ResponseEntity<?> delete(
+            @PathVariable("reviewId") Long reviewId,
+            @AuthenticationPrincipal BaseEntity userOrPartnerEntity
+    ) {
+        if (userOrPartnerEntity instanceof PartnerEntity) {
+            PartnerEntity partnerEntity = (PartnerEntity) userOrPartnerEntity;
+            this.reviewService.deleteByPartner(reviewId, partnerEntity);
+        } else if (userOrPartnerEntity instanceof UserEntity) {
+            UserEntity userEntity = (UserEntity) userOrPartnerEntity;
+            this.reviewService.deleteByUser(reviewId, userEntity);
+        } else {
+            throw new ReservationException(ErrorCode.UNAUTHORIZED);
+        }
+
+        return ResponseEntity.ok("review_id: " + reviewId + " 삭제완료");
     }
 }

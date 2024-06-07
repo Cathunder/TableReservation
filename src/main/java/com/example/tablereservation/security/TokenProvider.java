@@ -60,7 +60,7 @@ public class TokenProvider {
         } else if ("ROLE_PARTNER".equals(role)) {
             userDetails = this.partnerService.loadUserByUsername(this.getUsername(jwt));
         } else {
-            throw new ReservationException(ErrorCode.UNKNOWN_ROLE);
+            throw new ReservationException(ErrorCode.UNAUTHORIZED);
         }
 
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
