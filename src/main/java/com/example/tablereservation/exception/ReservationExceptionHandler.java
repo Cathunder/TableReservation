@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -31,9 +32,14 @@ public class ReservationExceptionHandler {
     protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         log.error("MethodArgumentNotValidException is occurred", e);
 
+        String errorMessage = e.getBindingResult().getAllErrors().stream()
+                .map(ObjectError::getDefaultMessage)
+                .findFirst()
+                .orElse(INVALID_REQUEST.getDescription());
+
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .errorCode(INVALID_REQUEST.getStatueCode())
-                .message(INVALID_REQUEST.getDescription())
+                .message(errorMessage)
                 .build();
 
         return new ResponseEntity<>(errorResponse, HttpStatus.resolve(errorResponse.getErrorCode()));
