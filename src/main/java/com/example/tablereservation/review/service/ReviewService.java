@@ -7,12 +7,15 @@ import com.example.tablereservation.reservation.entity.ReservationEntity;
 import com.example.tablereservation.reservation.repository.ReservationRepository;
 import com.example.tablereservation.review.dto.RegisterReviewDto;
 import com.example.tablereservation.review.dto.ReviewDto;
+import com.example.tablereservation.review.dto.UpdateReviewDto;
 import com.example.tablereservation.review.entity.ReviewEntity;
 import com.example.tablereservation.review.repository.ReviewRepository;
 import com.example.tablereservation.user.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ReviewService {
@@ -55,5 +58,31 @@ public class ReviewService {
                 .contents(request.getContents())
                 .rating(request.getRating())
                 .build();
+    }
+
+    /**
+     * 리뷰수정
+     * 1. 리뷰가 존재하는지 확인
+     * 2. 리뷰의 최초 작성자와 리뷰를 수정하려는 사람이 동일한지 확인
+     * 3. 수정하려는 리뷰정보의 존재유무에 따라 리뷰정보를 수정
+     */
+    public ReviewDto update(Long reviewId, UpdateReviewDto.Request request, UserEntity userEntity) {
+        ReviewEntity reviewEntity = this.reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new ReservationException(ErrorCode.REVIEW_NOT_EXIST));
+
+        if (!reviewEntity.getUser().getId().equals(userEntity.getId())) {
+            throw new ReservationException(ErrorCode.INCORRECT_USER);
+        }
+
+        if(request.getContents() != null) {
+            reviewEntity.setContents(request.getContents());
+        }
+
+        if(request.getRating() != null) {
+            reviewEntity.setRating(request.getRating());
+        }
+
+        ReviewEntity resultEntity = this.reviewRepository.save(reviewEntity);
+        return ReviewDto.fromEntity(resultEntity);
     }
 }
