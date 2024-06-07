@@ -28,7 +28,8 @@ public class ReviewService {
      * 1. 예약이 존재하는지 확인
      * 2. 예약을 한 유저와 로그인한 유저가 동일한지 확인
      * 3. 예약건이 이용완료 상태인지 확인
-     * 4. createReviewEntity()
+     * 4. 해당 예약건에 이미 리뷰를 작성했었는지 확인
+     * 5. createReviewEntity()
      */
     public ReviewDto register(RegisterReviewDto.Request request, UserEntity userEntity) {
         ReservationEntity reservationEntity = this.reservationRepository.findById(request.getReservationId())
@@ -40,6 +41,10 @@ public class ReviewService {
 
         if (!reservationEntity.getStatus().equals(ReservationStatus.COMPLETE)) {
             throw new ReservationException(ErrorCode.RESERVATION_STATUS_NOT_COMPLETE);
+        }
+
+        if (reservationEntity.getReview() != null) {
+            throw new ReservationException(ErrorCode.REVIEW_ALREADY_EXIST);
         }
 
         ReviewEntity reviewEntity = this.reviewRepository.save(createReviewEntity(request, reservationEntity));

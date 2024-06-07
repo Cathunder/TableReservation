@@ -38,6 +38,7 @@ public enum ErrorCode {
 
     // 리뷰
     RESERVATION_STATUS_NOT_COMPLETE("이용완료된 예약건에 대해서만 리뷰를 작성할 수 있습니다.", HttpStatus.BAD_REQUEST.value()),
+    REVIEW_ALREADY_EXIST("이미 리뷰를 작성했습니다. 리뷰수정만 가능합니다.", HttpStatus.CONFLICT.value()),
     REVIEW_NOT_EXIST("리뷰가 존재하지 않습니다.", HttpStatus.UNAUTHORIZED.value()),
     ;
 
