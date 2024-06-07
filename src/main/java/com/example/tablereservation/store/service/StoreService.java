@@ -69,10 +69,17 @@ public class StoreService {
 
     /**
      * 상점 삭제
+     * 1. 상점이 존재하는지 확인
+     * 2. 본인의 상점인지 확인
      */
-    public void deleteStore(Long storeId) {
+    public void deleteStore(Long storeId, PartnerEntity partnerEntity) {
         StoreEntity storeEntity = this.storeRepository.findById(storeId)
                 .orElseThrow(() -> new ReservationException(ErrorCode.STORE_NOT_EXIST));
+
+        if (!storeEntity.getPartner().getId().equals(partnerEntity.getId())) {
+            throw new ReservationException(ErrorCode.UNAUTHORIZED);
+        }
+
         storeRepository.delete(storeEntity);
     }
 

@@ -70,7 +70,7 @@ public class ReviewService {
     /**
      * 리뷰수정
      * 1. 리뷰가 존재하는지 확인
-     * 2. 리뷰의 최초 작성자와 리뷰를 수정하려는 사람이 동일한지 확인
+     * 2. 자신이 작성했었던 리뷰였는지 확인
      * 3. 수정하려는 리뷰정보의 존재유무에 따라 리뷰정보를 수정 (수정하지 않은 정보는 그대로 유지하기 위함)
      */
     public ReviewDto update(Long reviewId, UpdateReviewDto.Request request, UserEntity userEntity) {
@@ -94,9 +94,9 @@ public class ReviewService {
     }
 
     /**
-     * 리뷰삭제 (점주)
+     * 리뷰삭제 (파트너)
      * 1. 리뷰가 존재하는지 확인
-     * 2. 해당 리뷰가 파트너 매장의 리뷰인지 확인
+     * 2. 파트너 본인의 매장리뷰인지 확인
      */
     public void deleteByPartner(Long reviewId, PartnerEntity partnerEntity) {
         ReviewEntity reviewEntity = this.reviewRepository.findById(reviewId)
@@ -113,7 +113,7 @@ public class ReviewService {
     /**
      * 리뷰삭제 (유저)
      * 1. 리뷰가 존재하는지 확인
-     * 2. 리뷰의 최초 작성자와 리뷰를 삭제하려는 사람이 동일한지 확인
+     * 2. 자신이 작성했었던 리뷰였는지 확인
      */
     public void deleteByUser(Long reviewId, UserEntity userEntity) {
         ReviewEntity reviewEntity = this.reviewRepository.findById(reviewId)
