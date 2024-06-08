@@ -102,11 +102,36 @@ public class ReservationService {
 
     /**
      * 예약 승인
-     * 1. 예약이 존재하는지 확인
-     * 2. 자기(파트너) 매장의 예약인지 확인
-     * 3. 예약 상태를 승인으로 변경
+     * 1. checkReservationAndPartner()
+     * 2. 예약 상태를 승인으로 변경
      */
     public ReservationDto approve(Long reservationId, PartnerEntity partnerEntity) {
+        ReservationEntity reservationEntity = checkReservationAndPartner(reservationId, partnerEntity);
+
+        reservationEntity.setStatus(ReservationStatus.APPROVE);
+        this.reservationRepository.save(reservationEntity);
+        return ReservationDto.fromEntity(reservationEntity);
+    }
+
+    /**
+     * 예약 거절
+     * 1. checkReservationAndPartner()
+     * 2. 예약 상태를 거절로 변경
+     */
+    public ReservationDto refuse(Long reservationId, PartnerEntity partnerEntity) {
+        ReservationEntity reservationEntity = checkReservationAndPartner(reservationId, partnerEntity);
+
+        reservationEntity.setStatus(ReservationStatus.REFUSE);
+        this.reservationRepository.save(reservationEntity);
+        return ReservationDto.fromEntity(reservationEntity);
+    }
+
+    /**
+     * checkReservationAndPartner()
+     * 1. 예약이 존재하는지 확인
+     * 2. 자기(파트너) 매장의 예약인지 확인
+     */
+    private ReservationEntity checkReservationAndPartner(Long reservationId, PartnerEntity partnerEntity) {
         ReservationEntity reservationEntity = this.reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new ReservationException(ErrorCode.RESERVATION_NOT_EXIST));
 
@@ -116,23 +141,7 @@ public class ReservationService {
             throw new ReservationException(ErrorCode.UNAUTHORIZED);
         }
 
-        reservationEntity.setStatus(ReservationStatus.APPROVE);
-        this.reservationRepository.save(reservationEntity);
-        return ReservationDto.fromEntity(reservationEntity);
-    }
-
-    /**
-     * 예약 거절
-     * 1. 예약이 존재하는지 확인
-     * 2. 예약 상태를 거절로 변경
-     */
-    public ReservationDto refuse(Long reservationId) {
-        ReservationEntity reservationEntity = this.reservationRepository.findById(reservationId)
-                .orElseThrow(() -> new ReservationException(ErrorCode.RESERVATION_NOT_EXIST));
-
-        reservationEntity.setStatus(ReservationStatus.REFUSE);
-        this.reservationRepository.save(reservationEntity);
-        return ReservationDto.fromEntity(reservationEntity);
+        return reservationEntity;
     }
 
     /**

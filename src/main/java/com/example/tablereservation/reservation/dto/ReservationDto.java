@@ -2,6 +2,7 @@ package com.example.tablereservation.reservation.dto;
 
 import com.example.tablereservation.common.type.ReservationStatus;
 import com.example.tablereservation.reservation.entity.ReservationEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -19,7 +20,11 @@ public class ReservationDto {
     private String userPhone;
     private Integer people;
     private ReservationStatus status;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH")
     private LocalDateTime reservationDateTime;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
 
     public static ReservationDto fromEntity(ReservationEntity reservationEntity) {

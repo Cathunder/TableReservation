@@ -51,8 +51,11 @@ public class ReservationController {
      */
     @PreAuthorize("hasRole('PARTNER')")
     @PutMapping("/reservation/refuse")
-    public ResponseEntity<?> refuse(@RequestParam(value = "reservationId") Long reservationId) {
-        ReservationDto reservationDto = this.reservationService.refuse(reservationId);
+    public ResponseEntity<?> refuse(
+            @RequestParam(value = "reservationId") Long reservationId,
+            @AuthenticationPrincipal PartnerEntity partnerEntity
+    ) {
+        ReservationDto reservationDto = this.reservationService.refuse(reservationId, partnerEntity);
         return ResponseEntity.ok(reservationDto);
     }
 
