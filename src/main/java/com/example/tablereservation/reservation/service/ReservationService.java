@@ -11,7 +11,6 @@ import com.example.tablereservation.reservation.repository.ReservationRepository
 import com.example.tablereservation.store.entity.StoreEntity;
 import com.example.tablereservation.store.repository.StoreRepository;
 import com.example.tablereservation.user.entity.UserEntity;
-import com.example.tablereservation.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,7 +25,6 @@ import java.time.LocalTime;
 public class ReservationService {
 
     private final StoreRepository storeRepository;
-    private final UserRepository userRepository;
     private final ReservationRepository reservationRepository;
 
     /**
@@ -146,20 +144,23 @@ public class ReservationService {
 
     /**
      * 매장 도착 확인
-     * 1. 예약 및 유저가 존재하는지 확인
-     * 2. 예약시간 10분전 시도했는지 확인
-     * 3. 10분 사이에 시도했다면 예약상태를 변경
+     * 1. 예약이 존재하는지 확인
+     * 2. 예약한 유저와 로그인한 유저가 동일한지 확인
+     * 3. 예약시간 10분전 시도했는지 확인
+     * 4. 10분 사이에 시도했다면 예약상태를 변경
      */
-    public ReservationDto arrived(Long reservationId, UserEntity userDto) {
+    public ReservationDto arrived(Long reservationId, UserEntity userEntity) {
         ReservationEntity reservationEntity = this.reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new ReservationException(ErrorCode.RESERVATION_NOT_EXIST));
-        this.userRepository.findById(userDto.getId())
-                .orElseThrow(() -> new ReservationException(ErrorCode.USER_NOT_FOUND));
 
-        LocalDateTime reservationDateTime = reservationEntity.getReservationDateTime();
+        if (!reservationEntity.getUser().getId().equals(userEntity.getId())) {
+            throw new ReservationException(ErrorCode.UNAUTHORIZED);
+        }
+
+        LocalDateTime reservationAt = reservationEntity.getReservationDateTime();
         LocalDateTime now = LocalDateTime.now();
 
-        if (now.isAfter(reservationDateTime.minusMinutes(10)) && now.isBefore(reservationDateTime)) {
+        if (now.isAfter(reservationAt.minusMinutes(10)) && now.isBefore(reservationAt)) {
             reservationEntity.setStatus(ReservationStatus.ARRIVED);
             this.reservationRepository.save(reservationEntity);
         } else {
