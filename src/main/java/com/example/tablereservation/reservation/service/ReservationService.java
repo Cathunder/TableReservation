@@ -47,24 +47,92 @@ public class ReservationService {
     }
 
     /**
-     * createReservationEntity() - reservationEntity 생성
-     * 1. 요청으로 받은 정보를 엔티티에 저장
-     * 1. 예약시간 엔티티에 저장
-     * 2. 엔티티 반환
+     * 예약 승인
+     * 1. checkReservationAndPartner()
+     * 2. 예약 상태를 승인으로 변경
      */
-    private ReservationEntity createReservationEntity(RegisterReservationDto.Request request,
-                                                      StoreEntity storeEntity,
-                                                      UserEntity userEntity
-    ) {
-        LocalDateTime reservationDateTime = LocalDateTime.of(request.getDate(), request.getTime());
+    public ReservationDto approve(Long reservationId, PartnerEntity partnerEntity) {
+        ReservationEntity reservationEntity = checkReservationAndPartner(reservationId, partnerEntity);
 
-        return ReservationEntity.builder()
-                .user(userEntity)
-                .store(storeEntity)
-                .people(request.getPeople())
-                .status(ReservationStatus.REQUEST)
-                .reservationDateTime(reservationDateTime)
-                .build();
+        reservationEntity.setStatus(ReservationStatus.APPROVE);
+        this.reservationRepository.save(reservationEntity);
+        return ReservationDto.fromEntity(reservationEntity);
+    }
+
+    /**
+     * 예약 거절
+     * 1. checkReservationAndPartner()
+     * 2. 예약 상태를 거절로 변경
+     */
+    public ReservationDto refuse(Long reservationId, PartnerEntity partnerEntity) {
+        ReservationEntity reservationEntity = checkReservationAndPartner(reservationId, partnerEntity);
+
+        reservationEntity.setStatus(ReservationStatus.REFUSE);
+        this.reservationRepository.save(reservationEntity);
+        return ReservationDto.fromEntity(reservationEntity);
+    }
+
+    /**
+     * 매장 도착 확인
+     * 1. 예약이 존재하는지 확인
+     * 2. 예약한 유저와 로그인한 유저가 동일한지 확인
+     * 3. 예약시간 10분전 시도했는지 확인
+     * 4. 10분 사이에 시도했다면 예약상태를 변경
+     */
+    public ReservationDto arrived(Long reservationId, UserEntity userEntity) {
+        ReservationEntity reservationEntity = this.reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new ReservationException(ErrorCode.RESERVATION_NOT_EXIST));
+
+        if (!reservationEntity.getUser().getId().equals(userEntity.getId())) {
+            throw new ReservationException(ErrorCode.UNAUTHORIZED);
+        }
+
+        LocalDateTime reservationAt = reservationEntity.getReservationDateTime();
+        LocalDateTime now = LocalDateTime.now();
+
+        if (now.isAfter(reservationAt.minusMinutes(10)) && now.isBefore(reservationAt)) {
+            reservationEntity.setStatus(ReservationStatus.ARRIVED);
+            this.reservationRepository.save(reservationEntity);
+        } else {
+            throw new ReservationException(ErrorCode.CAN_ARRIVED_CONFIRM_BEFORE_10MIN);
+        }
+
+        return ReservationDto.fromEntity(reservationEntity);
+    }
+
+    /**
+     * 매장 사용 완료
+     * 1. checkReservationAndPartner()
+     * 2. 예약이 ARRIVED 상태인 경우만 COMPLETE로 처리 가능
+     */
+    public ReservationDto complete(Long reservationId, PartnerEntity partnerEntity) {
+        ReservationEntity reservationEntity = checkReservationAndPartner(reservationId, partnerEntity);
+
+        if(reservationEntity.getStatus() != ReservationStatus.ARRIVED) {
+            throw new ReservationException(ErrorCode.RESERVATION_STATUS_NOT_ARRIVED);
+        }
+
+        reservationEntity.setStatus(ReservationStatus.COMPLETE);
+        this.reservationRepository.save(reservationEntity);
+        return ReservationDto.fromEntity(reservationEntity);
+    }
+
+    /**
+     * checkReservationAndPartner()
+     * 1. 예약이 존재하는지 확인
+     * 2. 자기(파트너) 매장의 예약인지 확인
+     */
+    private ReservationEntity checkReservationAndPartner(Long reservationId, PartnerEntity partnerEntity) {
+        ReservationEntity reservationEntity = this.reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new ReservationException(ErrorCode.RESERVATION_NOT_EXIST));
+
+        StoreEntity storeEntity = reservationEntity.getStore();
+        Long partnerId = storeEntity.getPartner().getId();
+        if (!partnerId.equals(partnerEntity.getId())) {
+            throw new ReservationException(ErrorCode.UNAUTHORIZED);
+        }
+
+        return reservationEntity;
     }
 
     /**
@@ -99,92 +167,23 @@ public class ReservationService {
     }
 
     /**
-     * 예약 승인
-     * 1. checkReservationAndPartner()
-     * 2. 예약 상태를 승인으로 변경
+     * createReservationEntity() - reservationEntity 생성
+     * 1. 요청으로 받은 정보를 엔티티에 저장
+     * 1. 예약시간 엔티티에 저장
+     * 2. 엔티티 반환
      */
-    public ReservationDto approve(Long reservationId, PartnerEntity partnerEntity) {
-        ReservationEntity reservationEntity = checkReservationAndPartner(reservationId, partnerEntity);
+    private ReservationEntity createReservationEntity(RegisterReservationDto.Request request,
+                                                      StoreEntity storeEntity,
+                                                      UserEntity userEntity
+    ) {
+        LocalDateTime reservationDateTime = LocalDateTime.of(request.getDate(), request.getTime());
 
-        reservationEntity.setStatus(ReservationStatus.APPROVE);
-        this.reservationRepository.save(reservationEntity);
-        return ReservationDto.fromEntity(reservationEntity);
-    }
-
-    /**
-     * 예약 거절
-     * 1. checkReservationAndPartner()
-     * 2. 예약 상태를 거절로 변경
-     */
-    public ReservationDto refuse(Long reservationId, PartnerEntity partnerEntity) {
-        ReservationEntity reservationEntity = checkReservationAndPartner(reservationId, partnerEntity);
-
-        reservationEntity.setStatus(ReservationStatus.REFUSE);
-        this.reservationRepository.save(reservationEntity);
-        return ReservationDto.fromEntity(reservationEntity);
-    }
-
-    /**
-     * checkReservationAndPartner()
-     * 1. 예약이 존재하는지 확인
-     * 2. 자기(파트너) 매장의 예약인지 확인
-     */
-    private ReservationEntity checkReservationAndPartner(Long reservationId, PartnerEntity partnerEntity) {
-        ReservationEntity reservationEntity = this.reservationRepository.findById(reservationId)
-                .orElseThrow(() -> new ReservationException(ErrorCode.RESERVATION_NOT_EXIST));
-
-        StoreEntity storeEntity = reservationEntity.getStore();
-        Long partnerId = storeEntity.getPartner().getId();
-        if (!partnerId.equals(partnerEntity.getId())) {
-            throw new ReservationException(ErrorCode.UNAUTHORIZED);
-        }
-
-        return reservationEntity;
-    }
-
-    /**
-     * 매장 도착 확인
-     * 1. 예약이 존재하는지 확인
-     * 2. 예약한 유저와 로그인한 유저가 동일한지 확인
-     * 3. 예약시간 10분전 시도했는지 확인
-     * 4. 10분 사이에 시도했다면 예약상태를 변경
-     */
-    public ReservationDto arrived(Long reservationId, UserEntity userEntity) {
-        ReservationEntity reservationEntity = this.reservationRepository.findById(reservationId)
-                .orElseThrow(() -> new ReservationException(ErrorCode.RESERVATION_NOT_EXIST));
-
-        if (!reservationEntity.getUser().getId().equals(userEntity.getId())) {
-            throw new ReservationException(ErrorCode.UNAUTHORIZED);
-        }
-
-        LocalDateTime reservationAt = reservationEntity.getReservationDateTime();
-        LocalDateTime now = LocalDateTime.now();
-
-        if (now.isAfter(reservationAt.minusMinutes(10)) && now.isBefore(reservationAt)) {
-            reservationEntity.setStatus(ReservationStatus.ARRIVED);
-            this.reservationRepository.save(reservationEntity);
-        } else {
-            throw new ReservationException(ErrorCode.CAN_ARRIVED_CONFIRM_BEFORE_10MIN);
-        }
-
-        return ReservationDto.fromEntity(reservationEntity);
-    }
-
-    /**
-     * 매장 사용 완료
-     * 1. 예약이 존재하는지 확인
-     * 2. 예약이 ARRIVED 상태인 경우만 COMPLETE로 처리 가능
-     */
-    public ReservationDto complete(Long reservationId) {
-        ReservationEntity reservationEntity = this.reservationRepository.findById(reservationId)
-                .orElseThrow(() -> new ReservationException(ErrorCode.RESERVATION_NOT_EXIST));
-
-        if(reservationEntity.getStatus() != ReservationStatus.ARRIVED) {
-            throw new ReservationException(ErrorCode.CANNOT_SET_STATUS_COMPLETE);
-        }
-
-        reservationEntity.setStatus(ReservationStatus.COMPLETE);
-        this.reservationRepository.save(reservationEntity);
-        return ReservationDto.fromEntity(reservationEntity);
+        return ReservationEntity.builder()
+                .user(userEntity)
+                .store(storeEntity)
+                .people(request.getPeople())
+                .status(ReservationStatus.REQUEST)
+                .reservationDateTime(reservationDateTime)
+                .build();
     }
 }

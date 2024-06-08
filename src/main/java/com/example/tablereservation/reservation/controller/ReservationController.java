@@ -77,8 +77,11 @@ public class ReservationController {
      */
     @PreAuthorize("hasRole('PARTNER')")
     @PutMapping("reservation/complete")
-    public ResponseEntity<?> complete(@RequestParam(value = "reservationId") Long reservationId) {
-        ReservationDto reservationDto = this.reservationService.complete(reservationId);
+    public ResponseEntity<?> complete(
+            @RequestParam(value = "reservationId") Long reservationId,
+            @AuthenticationPrincipal PartnerEntity partnerEntity
+    ) {
+        ReservationDto reservationDto = this.reservationService.complete(reservationId, partnerEntity);
         return ResponseEntity.ok(reservationDto);
     }
 }
