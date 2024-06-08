@@ -1,34 +1,30 @@
 package com.example.tablereservation.store.dto;
 
-import com.example.tablereservation.partner.entity.PartnerEntity;
-import com.example.tablereservation.store.entity.StoreEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
 
-public class AddStore {
+public class RegisterStore {
 
     @Getter
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Request {
-        private Long partnerId;
-        private String storeName;
-        private String storeAddress;
-        private String storePhone;
-        private String storeIntroduction;
 
-        public static StoreEntity toEntity(Request request, PartnerEntity partnerEntity) {
-            return StoreEntity.builder()
-                    .partner(partnerEntity)
-                    .storeName(request.getStoreName())
-                    .storeAddress(request.getStoreAddress())
-                    .storePhone(request.getStorePhone())
-                    .storeIntroduction(request.getStoreIntroduction())
-                    .build();
-        }
+        @NotBlank(message = "매장명을 입력해주세요.")
+        private String storeName;
+
+        @NotBlank(message = "매장주소를 입력해주세요.")
+        private String storeAddress;
+
+        @NotNull(message = "매장 전화번호를 입력해주세요.")
+        @Size(min = 9, max = 12)
+        private String storePhone;
+
+        private String storeIntroduction;
     }
 
     @Getter
