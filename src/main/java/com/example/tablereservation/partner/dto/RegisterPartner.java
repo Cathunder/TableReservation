@@ -18,8 +18,8 @@ public class RegisterPartner {
         private String password;
         private String name;
         private String role;
-        private LocalDateTime createdDate;
-        private LocalDateTime updatedDate;
+        private LocalDateTime createdAt;
+        private LocalDateTime updatedAt;
 
         public static PartnerEntity toEntity(Request request) {
             return PartnerEntity.builder()
@@ -28,8 +28,8 @@ public class RegisterPartner {
                     .password(request.getPassword())
                     .name(request.getName())
                     .role(request.getRole())
-                    .createdDate(request.getCreatedDate())
-                    .updatedDate(request.getUpdatedDate())
+                    .createdAt(request.getCreatedAt())
+                    .updatedAt(request.getUpdatedAt())
                     .build();
         }
     }
@@ -45,8 +45,8 @@ public class RegisterPartner {
         private String password;
         private String name;
         private String role;
-        private LocalDateTime createdDate;
-        private LocalDateTime updatedDate;
+        private LocalDateTime createdAt;
+        private LocalDateTime updatedAt;
 
         public static Response fromDto(PartnerDto partnerDto) {
             return Response.builder()
@@ -55,8 +55,8 @@ public class RegisterPartner {
                     .password(partnerDto.getPassword())
                     .name(partnerDto.getName())
                     .role(partnerDto.getRole())
-                    .createdDate(partnerDto.getCreatedDate())
-                    .updatedDate(partnerDto.getUpdatedDate())
+                    .createdAt(partnerDto.getCreatedAt())
+                    .updatedAt(partnerDto.getUpdatedAt())
                     .build();
         }
     }

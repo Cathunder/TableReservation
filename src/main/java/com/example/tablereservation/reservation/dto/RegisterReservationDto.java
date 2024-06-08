@@ -48,7 +48,7 @@ public class RegisterReservationDto {
         private ReservationStatus status;
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH")
-        private LocalDateTime reservationDateTime;
+        private LocalDateTime reservationAt;
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime createdAt;
@@ -61,7 +61,7 @@ public class RegisterReservationDto {
                     .userPhone(reservationDto.getUserPhone())
                     .people(reservationDto.getPeople())
                     .status(reservationDto.getStatus())
-                    .reservationDateTime(reservationDto.getReservationDateTime())
+                    .reservationAt(reservationDto.getReservationAt())
                     .createdAt((reservationDto.getCreatedAt()))
                     .build();
         }

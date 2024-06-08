@@ -15,8 +15,8 @@ public class ReviewDto {
     private String storeName;
     private String contents;
     private Integer rating;
-    private LocalDateTime createdDate;
-    private LocalDateTime updatedDate;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public static ReviewDto fromEntity(ReviewEntity reviewEntity) {
         return ReviewDto.builder()
@@ -24,8 +24,8 @@ public class ReviewDto {
                 .storeName(reviewEntity.getStore().getStoreName())
                 .contents(reviewEntity.getContents())
                 .rating(reviewEntity.getRating())
-                .createdDate(reviewEntity.getCreatedDate())
-                .updatedDate(reviewEntity.getUpdatedDate())
+                .createdAt(reviewEntity.getCreatedAt())
+                .updatedAt(reviewEntity.getUpdatedAt())
                 .build();
     }
 }

@@ -16,8 +16,8 @@ public class PartnerDto {
     private String password;
     private String name;
     private String role;
-    private LocalDateTime createdDate;
-    private LocalDateTime updatedDate;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public static PartnerDto fromEntity(PartnerEntity partnerEntity) {
         return PartnerDto.builder()
@@ -26,8 +26,8 @@ public class PartnerDto {
                 .password(partnerEntity.getPassword())
                 .name(partnerEntity.getName())
                 .role(partnerEntity.getRole())
-                .createdDate(partnerEntity.getCreatedDate())
-                .updatedDate(partnerEntity.getUpdatedDate())
+                .createdAt(partnerEntity.getCreatedAt())
+                .updatedAt(partnerEntity.getUpdatedAt())
                 .build();
     }
 }

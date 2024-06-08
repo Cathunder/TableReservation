@@ -40,9 +40,9 @@ public class RegisterStore {
         private String storeIntroduction;
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-        private LocalDateTime createdDate;
+        private LocalDateTime createdAt;
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-        private LocalDateTime updatedDate;
+        private LocalDateTime updatedAt;
 
         public static Response fromDto(StoreDto storeDto) {
             return Response.builder()
@@ -51,8 +51,8 @@ public class RegisterStore {
                     .storeAddress(storeDto.getStoreAddress())
                     .storePhone(storeDto.getStorePhone())
                     .storeIntroduction(storeDto.getStoreIntroduction())
-                    .createdDate(storeDto.getCreateDate())
-                    .updatedDate(storeDto.getUpdateDate())
+                    .createdAt(storeDto.getCreateAt())
+                    .updatedAt(storeDto.getUpdateAt())
                     .build();
         }
     }

@@ -53,8 +53,8 @@ public class RegisterUser {
         private String name;
         private String phone;
         private String role;
-        private LocalDateTime createdDate;
-        private LocalDateTime updatedDate;
+        private LocalDateTime createdAt;
+        private LocalDateTime updatedAt;
 
         public static Response fromDto(UserDto userDto) {
             return Response.builder()
@@ -64,8 +64,8 @@ public class RegisterUser {
                     .name(userDto.getName())
                     .phone(userDto.getPhone())
                     .role(userDto.getRole())
-                    .createdDate(userDto.getCreatedDate())
-                    .updatedDate(userDto.getUpdatedDate())
+                    .createdAt(userDto.getCreatedAt())
+                    .updatedAt(userDto.getUpdatedAt())
                     .build();
         }
     }

@@ -34,9 +34,9 @@ public class UpdateReviewDto {
         private Integer rating;
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-        private LocalDateTime createdDate;
+        private LocalDateTime createdAt;
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-        private LocalDateTime updatedDate;
+        private LocalDateTime updatedAt;
 
         public static Response fromDto(ReviewDto reviewDto) {
             return Response.builder()
@@ -44,8 +44,8 @@ public class UpdateReviewDto {
                     .storeName(reviewDto.getStoreName())
                     .contents(reviewDto.getContents())
                     .rating(reviewDto.getRating())
-                    .createdDate(reviewDto.getCreatedDate())
-                    .updatedDate(reviewDto.getUpdatedDate())
+                    .createdAt(reviewDto.getCreatedAt())
+                    .updatedAt(reviewDto.getUpdatedAt())
                     .build();
         }
     }

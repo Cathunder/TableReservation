@@ -8,5 +8,5 @@ import java.time.LocalDateTime;
 
 @Repository
 public interface ReservationRepository extends JpaRepository<ReservationEntity, Long> {
-    boolean existsByStoreIdAndReservationDateTime(Long storeId, LocalDateTime reservationDateTime);
+    boolean existsByStoreIdAndReservationAt(Long storeId, LocalDateTime reservationAt);
 }

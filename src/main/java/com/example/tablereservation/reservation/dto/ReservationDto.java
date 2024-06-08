@@ -22,7 +22,7 @@ public class ReservationDto {
     private ReservationStatus status;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH")
-    private LocalDateTime reservationDateTime;
+    private LocalDateTime reservationAt;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
@@ -36,8 +36,8 @@ public class ReservationDto {
                 .userPhone(reservationEntity.getUser().getPhone())
                 .people(reservationEntity.getPeople())
                 .status(reservationEntity.getStatus())
-                .reservationDateTime(reservationEntity.getReservationDateTime())
-                .createdAt(reservationEntity.getCreatedDate())
+                .reservationAt(reservationEntity.getReservationAt())
+                .createdAt(reservationEntity.getCreatedAt())
                 .build();
     }
 }

@@ -17,8 +17,8 @@ public class StoreDto {
     private String storeAddress;
     private String storePhone;
     private String storeIntroduction;
-    private LocalDateTime createDate;
-    private LocalDateTime updateDate;
+    private LocalDateTime createAt;
+    private LocalDateTime updateAt;
 
     public static StoreDto fromEntity(StoreEntity storeEntity) {
         return StoreDto.builder()
@@ -28,8 +28,8 @@ public class StoreDto {
                 .storeAddress(storeEntity.getStoreAddress())
                 .storePhone(storeEntity.getStorePhone())
                 .storeIntroduction(storeEntity.getStoreIntroduction())
-                .createDate(storeEntity.getCreatedDate())
-                .updateDate(storeEntity.getUpdatedDate())
+                .createAt(storeEntity.getCreatedAt())
+                .updateAt(storeEntity.getUpdatedAt())
                 .build();
     }
 }

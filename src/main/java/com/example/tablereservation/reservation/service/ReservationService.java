@@ -87,7 +87,7 @@ public class ReservationService {
             throw new ReservationException(ErrorCode.UNAUTHORIZED);
         }
 
-        LocalDateTime reservationAt = reservationEntity.getReservationDateTime();
+        LocalDateTime reservationAt = reservationEntity.getReservationAt();
         LocalDateTime now = LocalDateTime.now();
 
         if (now.isAfter(reservationAt.minusMinutes(10)) && now.isBefore(reservationAt)) {
@@ -142,9 +142,9 @@ public class ReservationService {
     private void checkReservationAlreadyExist(RegisterReservationDto.Request request) {
         LocalDate date = request.getDate();
         LocalTime time = request.getTime();
-        LocalDateTime reservationDateTime = LocalDateTime.of(date, time);
+        LocalDateTime reservationAt = LocalDateTime.of(date, time);
 
-        boolean isExist = this.reservationRepository.existsByStoreIdAndReservationDateTime(request.getStoreId(), reservationDateTime);
+        boolean isExist = this.reservationRepository.existsByStoreIdAndReservationAt(request.getStoreId(), reservationAt);
         if (isExist) {
             throw new ReservationException(ErrorCode.RESERVATION_ALREADY_EXIST);
         }
@@ -158,10 +158,10 @@ public class ReservationService {
     private void checkReservationTime(RegisterReservationDto.Request request) {
         LocalDate date = request.getDate();
         LocalTime time = request.getTime();
-        LocalDateTime reservationDateTime = LocalDateTime.of(date, time);
+        LocalDateTime reservationAt = LocalDateTime.of(date, time);
         LocalDateTime nowPlusOneHour = LocalDateTime.now().plusHours(1);
 
-        if(reservationDateTime.isBefore(nowPlusOneHour)) {
+        if(reservationAt.isBefore(nowPlusOneHour)) {
             throw new ReservationException(ErrorCode.CANNOT_RESERVE_BEFORE_1HOUR);
         }
     }
@@ -176,14 +176,14 @@ public class ReservationService {
                                                       StoreEntity storeEntity,
                                                       UserEntity userEntity
     ) {
-        LocalDateTime reservationDateTime = LocalDateTime.of(request.getDate(), request.getTime());
+        LocalDateTime reservationAt = LocalDateTime.of(request.getDate(), request.getTime());
 
         return ReservationEntity.builder()
                 .user(userEntity)
                 .store(storeEntity)
                 .people(request.getPeople())
                 .status(ReservationStatus.REQUEST)
-                .reservationDateTime(reservationDateTime)
+                .reservationAt(reservationAt)
                 .build();
     }
 }

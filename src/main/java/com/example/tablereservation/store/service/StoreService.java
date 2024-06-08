@@ -110,7 +110,7 @@ public class StoreService {
             storeEntity.setStoreIntroduction(request.getStoreIntroduction());
         }
 
-        storeEntity.setUpdatedDate(LocalDateTime.now());
+        storeEntity.setUpdatedAt(LocalDateTime.now());
 
         return storeEntity;
     }

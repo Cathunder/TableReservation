@@ -17,8 +17,8 @@ public class UserDto {
     private String name;
     private String phone;
     private String role;
-    private LocalDateTime createdDate;
-    private LocalDateTime updatedDate;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public static UserDto toEntity(UserEntity userEntity) {
         return UserDto.builder()
@@ -28,8 +28,8 @@ public class UserDto {
                 .name(userEntity.getName())
                 .phone(userEntity.getPhone())
                 .role(userEntity.getRole())
-                .createdDate(userEntity.getCreatedDate())
-                .updatedDate(userEntity.getUpdatedDate())
+                .createdAt(userEntity.getCreatedAt())
+                .updatedAt(userEntity.getUpdatedAt())
                 .build();
     }
 }

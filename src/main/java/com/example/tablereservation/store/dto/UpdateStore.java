@@ -46,8 +46,8 @@ public class UpdateStore {
                     .storeAddress(storeDto.getStoreAddress())
                     .storePhone(storeDto.getStorePhone())
                     .storeIntroduction(storeDto.getStoreIntroduction())
-                    .createDate(storeDto.getCreateDate())
-                    .updateDate(storeDto.getUpdateDate())
+                    .createDate(storeDto.getCreateAt())
+                    .updateDate(storeDto.getUpdateAt())
                     .build();
         }
     }
