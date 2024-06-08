@@ -1,6 +1,8 @@
 package com.example.tablereservation.partner.dto;
 
 import com.example.tablereservation.partner.entity.PartnerEntity;
+import com.example.tablereservation.security.Authority;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -13,23 +15,22 @@ public class RegisterPartner {
     @AllArgsConstructor
     @Builder
     public static class Request {
-        private Long id;
+
+        @NotBlank(message = "로그인 아이디를 입력하세요.")
         private String loginId;
+
+        @NotBlank(message = "비밀번호를 입력하세요.")
         private String password;
+
+        @NotBlank(message = "이름을 입력하세요.")
         private String name;
-        private String role;
-        private LocalDateTime createdAt;
-        private LocalDateTime updatedAt;
 
         public static PartnerEntity toEntity(Request request) {
             return PartnerEntity.builder()
-                    .id(request.getId())
                     .loginId(request.getLoginId())
                     .password(request.getPassword())
                     .name(request.getName())
-                    .role(request.getRole())
-                    .createdAt(request.getCreatedAt())
-                    .updatedAt(request.getUpdatedAt())
+                    .role(Authority.ROLE_PARTNER.name())
                     .build();
         }
     }

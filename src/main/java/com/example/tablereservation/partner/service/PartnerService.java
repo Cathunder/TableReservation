@@ -30,23 +30,26 @@ public class PartnerService implements UserDetailsService {
 
     /**
      * 회원가입
+     * 1. 로그인 아이디가 중복인지 확인
+     * 2. 비밀번호는 passwordEncoder를 통해 저장
      */
     public PartnerDto register(RegisterPartner.Request request) {
-        boolean exist = this.partnerRepository.existsByLoginId(request.getLoginId());
-        if (exist) {
+        if (this.partnerRepository.existsByLoginId(request.getLoginId())) {
             throw new ReservationException(ErrorCode.ID_ALREADY_EXIST);
         }
 
         request.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        PartnerEntity entity = this.partnerRepository.save(RegisterPartner.Request.toEntity(request));
-        return PartnerDto.fromEntity(entity);
+        PartnerEntity partnerEntity = this.partnerRepository.save(RegisterPartner.Request.toEntity(request));
+        return PartnerDto.fromEntity(partnerEntity);
     }
 
     /**
-     * 로그인 시 검증
+     * 로그인
+     * 1. 존재하는 파트너인지 확인
+     * 2. 저장된 비밀번호와 로그인시 입력한 비밀번호가 동일한지 확인
      */
-    public PartnerEntity authenticate(LoginPartner partner) {
+    public PartnerEntity login(LoginPartner partner) {
         PartnerEntity partnerEntity = this.partnerRepository.findByLoginId(partner.getLoginId())
                 .orElseThrow(() -> new ReservationException(ErrorCode.ID_NOT_EXIST));
 

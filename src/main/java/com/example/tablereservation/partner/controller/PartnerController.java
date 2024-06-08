@@ -6,6 +6,7 @@ import com.example.tablereservation.partner.dto.LoginPartner;
 import com.example.tablereservation.partner.entity.PartnerEntity;
 import com.example.tablereservation.partner.service.PartnerService;
 import com.example.tablereservation.security.TokenProvider;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -25,17 +26,17 @@ public class PartnerController {
      * 파트너 회원가입
      */
     @PostMapping("/partner/register")
-    public ResponseEntity<?> register(@RequestBody RegisterPartner.Request request) {
+    public ResponseEntity<?> register(@RequestBody @Valid RegisterPartner.Request request) {
         PartnerDto partnerDto = this.partnerService.register(request);
         return ResponseEntity.ok(RegisterPartner.Response.fromDto(partnerDto));
     }
 
     /**
-     * 파트너 로그인
+     * 파트너 로그인 - 토큰값 반환
      */
     @PostMapping("/partner/login")
-    public ResponseEntity<?> login(@RequestBody LoginPartner request) {
-        PartnerEntity partnerEntity = this.partnerService.authenticate(request);
+    public ResponseEntity<?> login(@RequestBody @Valid LoginPartner request) {
+        PartnerEntity partnerEntity = this.partnerService.login(request);
         String token = this.tokenProvider.generateToken(partnerEntity.getLoginId(), partnerEntity.getRole());
         return ResponseEntity.ok(token);
     }
