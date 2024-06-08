@@ -44,7 +44,7 @@ public class StoreController {
     @PutMapping("/store/update/{storeId}")
     public ResponseEntity<?> updateStore(
             @PathVariable("storeId") Long storeId,
-            @RequestBody UpdateStore.Request request,
+            @RequestBody @Valid UpdateStore.Request request,
             @AuthenticationPrincipal PartnerEntity partnerEntity
     ) {
         StoreDto storeDto = this.storeService.updateStore(storeId, request, partnerEntity);
@@ -71,7 +71,7 @@ public class StoreController {
     public ResponseEntity<?> findStore(
             @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
             @RequestParam(value = "searchType", defaultValue = "ALL") SearchType searchType,
-            @RequestBody SearchStore.Request request
+            @RequestBody @Valid SearchStore.Request request
     ) {
         Pageable pageable = Pageable.ofSize(pageSize);
         Page<StoreDto> storeList = this.storeService.findStore(pageable, searchType, request);

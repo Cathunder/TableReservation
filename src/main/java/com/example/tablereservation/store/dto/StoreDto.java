@@ -1,7 +1,6 @@
 package com.example.tablereservation.store.dto;
 
 import com.example.tablereservation.store.entity.StoreEntity;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import java.time.LocalDateTime;

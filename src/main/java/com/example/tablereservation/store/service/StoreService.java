@@ -3,7 +3,6 @@ package com.example.tablereservation.store.service;
 import com.example.tablereservation.exception.ErrorCode;
 import com.example.tablereservation.exception.ReservationException;
 import com.example.tablereservation.partner.entity.PartnerEntity;
-import com.example.tablereservation.partner.repository.PartnerRepository;
 import com.example.tablereservation.store.dto.RegisterStore;
 import com.example.tablereservation.store.dto.SearchStore;
 import com.example.tablereservation.store.dto.StoreDto;
@@ -25,7 +24,6 @@ import java.time.LocalDateTime;
 public class StoreService {
 
     private final StoreRepository storeRepository;
-    private final PartnerRepository partnerRepository;
 
     /**
      * 매장 등록
@@ -46,7 +44,7 @@ public class StoreService {
      * 매장 정보 수정
      * 1. 해당 매장이 존재하는지 확인
      * 2. 본인의 매장인지 확인
-     * 3. update()
+     * 3. updateStoreEntity()
      */
     public StoreDto updateStore(Long storeId, UpdateStore.Request request, PartnerEntity partnerEntity) {
         StoreEntity storeEntity = storeRepository.findById(storeId)
@@ -91,7 +89,7 @@ public class StoreService {
     }
 
     /**
-     * update()
+     * updateStoreEntity()
      * 1. 수정값이 있을 경우 매장정보를 수정한다.
      * 2. 수정된 날짜를 추가한다.
      */
