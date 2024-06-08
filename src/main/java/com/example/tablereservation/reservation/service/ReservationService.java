@@ -30,56 +30,49 @@ public class ReservationService {
 
     /**
      * 예약 등록
-     * 1. 요청으로 들어온 매장아이디 및 로그인아이디로 해당 매장 및 유저가 존재하는지 확인
-     * 2. 현재 로그인된 아이디와 요청을 보낸 로그인 아이디가 동일한지 확인
-     * 3. checkAlreadyExist()
-     * 4. checkTime()
-     * 5. createReservationEntity()
-     * 6. 예약 생성
+     * 1. 예약하려는 상점이 존재하는지 확인
+     * 2. checkReservationAlreadyExist()
+     * 3. checkReservationTime()
+     * 4. createReservationEntity()
+     * 5. dto로 반환
      */
-    public ReservationDto register(RegisterReservationDto.Request request, String loginId) {
+    public ReservationDto register(RegisterReservationDto.Request request, UserEntity userEntity) {
         StoreEntity storeEntity = this.storeRepository.findById(request.getStoreId())
                 .orElseThrow(() -> new ReservationException(ErrorCode.STORE_NOT_EXIST));
-        UserEntity userEntity = this.userRepository.findByLoginId(request.getLoginId())
-                .orElseThrow(() -> new ReservationException(ErrorCode.ID_NOT_EXIST));
 
-        if (!loginId.equals(request.getLoginId())) {
-            throw new ReservationException(ErrorCode.INCORRECT_USER);
-        }
+        checkReservationAlreadyExist(request);
+        checkReservationTime(request);
 
-        checkAlreadyExist(request);
-        checkTime(request);
-        ReservationEntity reservationEntity = createReservationEntity(request, storeEntity, userEntity);
-
-        ReservationEntity resultEntity = this.reservationRepository.save(reservationEntity);
+        ReservationEntity resultEntity = this.reservationRepository.save(createReservationEntity(request, storeEntity, userEntity));
         return ReservationDto.fromEntity(resultEntity);
     }
 
     /**
      * createReservationEntity() - reservationEntity 생성
-     * 1. 엔티티에 예약시간 저장
+     * 1. 요청으로 받은 정보를 엔티티에 저장
+     * 1. 예약시간 엔티티에 저장
      * 2. 엔티티 반환
      */
     private ReservationEntity createReservationEntity(RegisterReservationDto.Request request,
                                                       StoreEntity storeEntity,
                                                       UserEntity userEntity
     ) {
-        LocalDateTime localDateTime = LocalDateTime.of(request.getDate(), request.getTime());
+        LocalDateTime reservationDateTime = LocalDateTime.of(request.getDate(), request.getTime());
 
         return ReservationEntity.builder()
                 .user(userEntity)
                 .store(storeEntity)
                 .people(request.getPeople())
                 .status(ReservationStatus.REQUEST)
-                .reservationDateTime(localDateTime)
+                .reservationDateTime(reservationDateTime)
                 .build();
     }
 
     /**
-     * checkAlreadyExist()
+     * checkReservationAlreadyExist()
      * 1. 예약하려는 매장에 동일한 시간대의 예약이 존재하는지 확인
      */
-    private void checkAlreadyExist(RegisterReservationDto.Request request) {
+    private void checkReservationAlreadyExist(RegisterReservationDto.Request request) {
         LocalDate date = request.getDate();
         LocalTime time = request.getTime();
         LocalDateTime reservationDateTime = LocalDateTime.of(date, time);
@@ -91,18 +84,18 @@ public class ReservationService {
     }
 
     /**
-     * checkTime() - 최소 예약가능시간 확인
-     * 1시간전에는 예약 불가능
+     * checkReservationTime() - 최소 예약가능시간 확인
+     * 이용 1시간 전에는 예약 불가능
      * ex) 17:00 ~ 18:00 사이에는 18시 예약이 불가능
      */
-    private void checkTime(RegisterReservationDto.Request request) {
+    private void checkReservationTime(RegisterReservationDto.Request request) {
         LocalDate date = request.getDate();
         LocalTime time = request.getTime();
         LocalDateTime reservationDateTime = LocalDateTime.of(date, time);
         LocalDateTime nowPlusOneHour = LocalDateTime.now().plusHours(1);
 
         if(reservationDateTime.isBefore(nowPlusOneHour)) {
-            throw new ReservationException(ErrorCode.CANNOT_RESERVATION_BEFORE_1HOUR);
+            throw new ReservationException(ErrorCode.CANNOT_RESERVE_BEFORE_1HOUR);
         }
     }
 

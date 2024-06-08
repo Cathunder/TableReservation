@@ -28,10 +28,9 @@ public class ReservationController {
     @PostMapping("/reservation/register")
     public ResponseEntity<?> register(
             @RequestBody @Valid RegisterReservationDto.Request request,
-            Principal principal
+            @AuthenticationPrincipal UserEntity userEntity
     ) {
-        String loginId = principal.getName();
-        ReservationDto reservationDto = this.reservationService.register(request, loginId);
+        ReservationDto reservationDto = this.reservationService.register(request, userEntity);
         return ResponseEntity.ok(RegisterReservationDto.Response.fromDto(reservationDto));
     }
 
