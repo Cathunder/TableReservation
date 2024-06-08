@@ -25,7 +25,7 @@ public class ReviewController {
     final ReviewService reviewService;
 
     /**
-     * 리뷰작성
+     * 리뷰등록
      */
     @PreAuthorize("hasRole('USER')")
     @PostMapping("review/register")
@@ -61,11 +61,9 @@ public class ReviewController {
             @PathVariable("reviewId") Long reviewId,
             @AuthenticationPrincipal BaseEntity userOrPartnerEntity
     ) {
-        if (userOrPartnerEntity instanceof PartnerEntity) {
-            PartnerEntity partnerEntity = (PartnerEntity) userOrPartnerEntity;
+        if (userOrPartnerEntity instanceof PartnerEntity partnerEntity) {
             this.reviewService.deleteByPartner(reviewId, partnerEntity);
-        } else if (userOrPartnerEntity instanceof UserEntity) {
-            UserEntity userEntity = (UserEntity) userOrPartnerEntity;
+        } else if (userOrPartnerEntity instanceof UserEntity userEntity) {
             this.reviewService.deleteByUser(reviewId, userEntity);
         } else {
             throw new ReservationException(ErrorCode.UNAUTHORIZED);

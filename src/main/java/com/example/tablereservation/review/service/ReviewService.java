@@ -26,7 +26,7 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
 
     /**
-     * 리뷰 작성
+     * 리뷰등록
      * 1. 예약이 존재하는지 확인
      * 2. 예약을 한 유저와 로그인한 유저가 동일한지 확인
      * 3. 예약건이 이용완료 상태인지 확인
