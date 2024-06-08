@@ -37,6 +37,7 @@ public class UserService implements UserDetailsService {
         }
 
         request.setPassword(passwordEncoder.encode(request.getPassword()));
+
         UserEntity userEntity = this.userRepository.save(RegisterUser.Request.toEntity(request));
         return UserDto.toEntity(userEntity);
     }

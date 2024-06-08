@@ -12,21 +12,21 @@ public enum ErrorCode {
     TOKEN_WAS_EXPIRED("토큰이 만료되었습니다.", HttpStatus.UNAUTHORIZED.value()),
 
     // 파트너
-    PARTNER_NOT_FOUND("해당 파트너를 찾지 못했습니다.", HttpStatus.BAD_REQUEST.value()),
+    PARTNER_NOT_FOUND("해당 파트너가 존재하지 않습니다.", HttpStatus.BAD_REQUEST.value()),
+
+    // 유저
+    USER_NOT_FOUND("해당 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST.value()),
 
     // 공용
     UNAUTHORIZED("권한이 없습니다.", HttpStatus.FORBIDDEN.value()),
-    USER_NOT_FOUND("해당 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST.value()),
     ID_ALREADY_EXIST("이미 사용중인 아이디입니다.", HttpStatus.CONFLICT.value()),
     ID_NOT_EXIST("존재하지 않는 아이디입니다.", HttpStatus.UNAUTHORIZED.value()),
     PASSWORD_INCORRECT("비밀번호가 일치하지 않습니다.", HttpStatus.UNAUTHORIZED.value()),
     INVALID_REQUEST("잘못된 요청입니다.", HttpStatus.BAD_REQUEST.value()),
-    INCORRECT_USER("유저정보가 일치하지 않습니다.", HttpStatus.UNAUTHORIZED.value()),
 
     // 매장
     STORE_NAME_ALREADY_EXIST("이미 등록된 매장명입니다.", HttpStatus.CONFLICT.value()),
     STORE_NOT_EXIST("존재하지 않는 매장입니다.", HttpStatus.BAD_REQUEST.value()),
-    NOT_PARTNER("파트너가 아닙니다.", HttpStatus.UNAUTHORIZED.value()),
 
     // 예약
     RESERVATION_ALREADY_EXIST("해당 시간대에 이미 예약이 존재합니다. 다른 시간대를 선택해주세요.", HttpStatus.CONFLICT.value()),

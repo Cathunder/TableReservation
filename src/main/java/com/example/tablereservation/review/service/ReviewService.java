@@ -38,7 +38,7 @@ public class ReviewService {
                 .orElseThrow(() -> new ReservationException(ErrorCode.RESERVATION_NOT_EXIST));
 
         if (!reservationEntity.getUser().getId().equals(userEntity.getId())) {
-            throw new ReservationException(ErrorCode.INCORRECT_USER);
+            throw new ReservationException(ErrorCode.UNAUTHORIZED);
         }
 
         if (!reservationEntity.getStatus().equals(ReservationStatus.COMPLETE)) {
@@ -78,7 +78,7 @@ public class ReviewService {
                 .orElseThrow(() -> new ReservationException(ErrorCode.REVIEW_NOT_EXIST));
 
         if (!reviewEntity.getUser().getId().equals(userEntity.getId())) {
-            throw new ReservationException(ErrorCode.INCORRECT_USER);
+            throw new ReservationException(ErrorCode.UNAUTHORIZED);
         }
 
         if(request.getContents() != null) {
@@ -120,7 +120,7 @@ public class ReviewService {
                 .orElseThrow(() -> new ReservationException(ErrorCode.REVIEW_NOT_EXIST));
 
         if (!reviewEntity.getUser().getId().equals(userEntity.getId())) {
-            throw new ReservationException(ErrorCode.INCORRECT_USER);
+            throw new ReservationException(ErrorCode.UNAUTHORIZED);
         }
 
         this.reviewRepository.delete(reviewEntity);
