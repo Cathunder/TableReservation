@@ -1,6 +1,9 @@
 package com.example.tablereservation.user.dto;
 
+import com.example.tablereservation.security.Authority;
 import com.example.tablereservation.user.entity.UserEntity;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -13,25 +16,27 @@ public class RegisterUser {
     @AllArgsConstructor
     @Builder
     public static class Request {
-        private Long id;
+
+        @NotBlank(message = "로그인 아이디를 입력하세요.")
         private String loginId;
+
+        @NotBlank(message = "비밀번호를 입력하세요.")
         private String password;
+
+        @NotBlank(message = "이름을 입력하세요.")
         private String name;
+
+        @NotBlank(message = "휴대폰 번호를 입력하세요.")
+        @Size(min = 11, max = 11)
         private String phone;
-        private String role;
-        private LocalDateTime createdDate;
-        private LocalDateTime updatedDate;
 
         public static UserEntity toEntity(Request request) {
             return UserEntity.builder()
-                    .id(request.getId())
                     .loginId(request.getLoginId())
                     .password(request.getPassword())
                     .name(request.getName())
                     .phone(request.getPhone())
-                    .role(request.getRole())
-                    .createdDate(request.getCreatedDate())
-                    .updatedDate(request.getUpdatedDate())
+                    .role(Authority.ROLE_USER.name())
                     .build();
         }
     }

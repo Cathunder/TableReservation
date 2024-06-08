@@ -28,10 +28,11 @@ public class UserService implements UserDetailsService {
 
     /**
      * 회원가입
+     * 1. 로그인 아이디가 중복인지 확인
+     * 2. 비밀번호는 passwordEncoder를 통해 저장
      */
     public UserDto register(RegisterUser.Request request) {
-        boolean isExist = this.userRepository.existsByLoginId(request.getLoginId());
-        if (isExist) {
+        if (this.userRepository.existsByLoginId(request.getLoginId())) {
             throw new ReservationException(ErrorCode.ID_ALREADY_EXIST);
         }
 
@@ -41,9 +42,11 @@ public class UserService implements UserDetailsService {
     }
 
     /**
-     * 로그인 시 검증
+     * 로그인
+     * 1. 존재하는 유저인지 확인
+     * 2. 저장된 비밀번호와 로그인시 입력한 비밀번호가 동일한지 확인
      */
-    public UserEntity authenticate(LoginUser user) {
+    public UserEntity login(LoginUser user) {
         UserEntity userEntity = this.userRepository.findByLoginId(user.getLoginId())
                 .orElseThrow(() -> new ReservationException(ErrorCode.ID_NOT_EXIST));
 
