@@ -15,7 +15,7 @@ public enum ErrorCode {
     PARTNER_NOT_FOUND("해당 파트너를 찾지 못했습니다.", HttpStatus.BAD_REQUEST.value()),
 
     // 공용
-    UNAUTHORIZED("권한이 없습니다.", HttpStatus.UNAUTHORIZED.value()),
+    UNAUTHORIZED("권한이 없습니다.", HttpStatus.FORBIDDEN.value()),
     USER_NOT_FOUND("해당 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST.value()),
     ID_ALREADY_EXIST("이미 사용중인 아이디입니다.", HttpStatus.CONFLICT.value()),
     ID_NOT_EXIST("존재하지 않는 아이디입니다.", HttpStatus.UNAUTHORIZED.value()),
@@ -23,10 +23,9 @@ public enum ErrorCode {
     INVALID_REQUEST("잘못된 요청입니다.", HttpStatus.BAD_REQUEST.value()),
     INCORRECT_USER("유저정보가 일치하지 않습니다.", HttpStatus.UNAUTHORIZED.value()),
 
-    // 상점
-    PARTNER_NOT_MATCHED("해당 상점에 대한 권한이 없습니다.", HttpStatus.FORBIDDEN.value()),
-    STORE_ALREADY_EXIST("이미 등록된 상점입니다.", HttpStatus.CONFLICT.value()),
-    STORE_NOT_EXIST("존재하지 않는 상점입니다.", HttpStatus.BAD_REQUEST.value()),
+    // 매장
+    STORE_NAME_ALREADY_EXIST("이미 등록된 매장명입니다.", HttpStatus.CONFLICT.value()),
+    STORE_NOT_EXIST("존재하지 않는 매장입니다.", HttpStatus.BAD_REQUEST.value()),
     NOT_PARTNER("파트너가 아닙니다.", HttpStatus.UNAUTHORIZED.value()),
 
     // 예약

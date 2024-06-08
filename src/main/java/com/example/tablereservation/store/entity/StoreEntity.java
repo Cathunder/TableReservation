@@ -29,7 +29,9 @@ public class StoreEntity extends BaseEntity {
     @OneToMany(mappedBy = "store", fetch = FetchType.LAZY)
     private List<ReviewEntity> reviews = new ArrayList<>();
 
+    @Column(unique = true)
     private String storeName;
+
     private String storeAddress;
     private String storePhone;
     private String storeIntroduction;

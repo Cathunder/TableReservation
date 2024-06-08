@@ -18,10 +18,7 @@ public class StoreDto {
     private String storeAddress;
     private String storePhone;
     private String storeIntroduction;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createDate;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updateDate;
 
     public static StoreDto fromEntity(StoreEntity storeEntity) {
