@@ -3,6 +3,7 @@ package com.example.tablereservation.reservation.service;
 import com.example.tablereservation.common.type.ReservationStatus;
 import com.example.tablereservation.exception.ErrorCode;
 import com.example.tablereservation.exception.ReservationException;
+import com.example.tablereservation.partner.entity.PartnerEntity;
 import com.example.tablereservation.reservation.dto.RegisterReservationDto;
 import com.example.tablereservation.reservation.dto.ReservationDto;
 import com.example.tablereservation.reservation.entity.ReservationEntity;
@@ -102,11 +103,18 @@ public class ReservationService {
     /**
      * 예약 승인
      * 1. 예약이 존재하는지 확인
-     * 2. 예약 상태를 승인으로 변경
+     * 2. 자기(파트너) 매장의 예약인지 확인
+     * 3. 예약 상태를 승인으로 변경
      */
-    public ReservationDto approve(Long reservationId) {
+    public ReservationDto approve(Long reservationId, PartnerEntity partnerEntity) {
         ReservationEntity reservationEntity = this.reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new ReservationException(ErrorCode.RESERVATION_NOT_EXIST));
+
+        StoreEntity storeEntity = reservationEntity.getStore();
+        Long partnerId = storeEntity.getPartner().getId();
+        if (!partnerId.equals(partnerEntity.getId())) {
+            throw new ReservationException(ErrorCode.UNAUTHORIZED);
+        }
 
         reservationEntity.setStatus(ReservationStatus.APPROVE);
         this.reservationRepository.save(reservationEntity);

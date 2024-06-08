@@ -1,5 +1,6 @@
 package com.example.tablereservation.reservation.controller;
 
+import com.example.tablereservation.partner.entity.PartnerEntity;
 import com.example.tablereservation.reservation.dto.RegisterReservationDto;
 import com.example.tablereservation.reservation.dto.ReservationDto;
 import com.example.tablereservation.reservation.service.ReservationService;
@@ -11,8 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.security.Principal;
 
 @Slf4j
 @RestController
@@ -39,8 +38,11 @@ public class ReservationController {
      */
     @PreAuthorize("hasRole('PARTNER')")
     @PutMapping("/reservation/approve")
-    public ResponseEntity<?> approve(@RequestParam(value = "reservationId") Long reservationId) {
-        ReservationDto reservationDto = this.reservationService.approve(reservationId);
+    public ResponseEntity<?> approve(
+            @RequestParam(value = "reservationId") Long reservationId,
+            @AuthenticationPrincipal PartnerEntity partnerEntity
+    ) {
+        ReservationDto reservationDto = this.reservationService.approve(reservationId, partnerEntity);
         return ResponseEntity.ok(reservationDto);
     }
 
@@ -60,8 +62,8 @@ public class ReservationController {
     @PreAuthorize("hasRole('USER')")
     @PutMapping("reservation/arrived")
     public ResponseEntity<?> arrived(
-        @RequestParam(value = "reservationId") Long reservationId,
-        @AuthenticationPrincipal UserEntity userEntity
+            @RequestParam(value = "reservationId") Long reservationId,
+            @AuthenticationPrincipal UserEntity userEntity
     ) {
         ReservationDto reservationDto = this.reservationService.arrived(reservationId, userEntity);
         return ResponseEntity.ok(reservationDto);
