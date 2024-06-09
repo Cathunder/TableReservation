@@ -2,6 +2,7 @@ package com.example.tablereservation.user.dto;
 
 import com.example.tablereservation.security.Authority;
 import com.example.tablereservation.user.entity.UserEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -53,7 +54,10 @@ public class RegisterUser {
         private String name;
         private String phone;
         private String role;
+
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime createdAt;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime updatedAt;
 
         public static Response fromDto(UserDto userDto) {
