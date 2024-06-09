@@ -2,6 +2,7 @@ package com.example.tablereservation.partner.dto;
 
 import com.example.tablereservation.partner.entity.PartnerEntity;
 import com.example.tablereservation.security.Authority;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
@@ -46,7 +47,10 @@ public class RegisterPartnerDto {
         private String password;
         private String name;
         private String role;
+
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime createdAt;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime updatedAt;
 
         public static Response fromDto(PartnerDto partnerDto) {

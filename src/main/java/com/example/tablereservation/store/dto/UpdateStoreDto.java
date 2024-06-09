@@ -1,8 +1,7 @@
 package com.example.tablereservation.store.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -17,8 +16,7 @@ public class UpdateStoreDto {
         private String storeName;
         private String storeAddress;
 
-        @Min(9)
-        @Max(12)
+        @Size(min = 9, max = 12)
         private String storePhone;
 
         private String storeIntroduction;

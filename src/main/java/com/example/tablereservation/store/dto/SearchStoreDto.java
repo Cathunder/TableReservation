@@ -18,6 +18,7 @@ public class SearchStoreDto {
     @AllArgsConstructor
     @Builder
     public static class Response {
+        private Long storeId;
         private String storeName;
         private String storeAddress;
         private String storePhone;
@@ -25,6 +26,7 @@ public class SearchStoreDto {
 
         public static SearchStoreDto.Response fromDto(StoreDto storeDto) {
             return SearchStoreDto.Response.builder()
+                    .storeId(storeDto.getId())
                     .storeName(storeDto.getStoreName())
                     .storeAddress(storeDto.getStoreAddress())
                     .storePhone(storeDto.getStorePhone())

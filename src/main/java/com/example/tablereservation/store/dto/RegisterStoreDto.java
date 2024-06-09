@@ -34,6 +34,7 @@ public class RegisterStoreDto {
     @Builder
     public static class Response {
         private Long partnerId;
+        private Long storeId;
         private String storeName;
         private String storeAddress;
         private String storePhone;
@@ -47,6 +48,7 @@ public class RegisterStoreDto {
         public static Response fromDto(StoreDto storeDto) {
             return Response.builder()
                     .partnerId(storeDto.getPartnerId())
+                    .storeId(storeDto.getId())
                     .storeName(storeDto.getStoreName())
                     .storeAddress(storeDto.getStoreAddress())
                     .storePhone(storeDto.getStorePhone())
