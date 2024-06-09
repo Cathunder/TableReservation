@@ -3,8 +3,8 @@ package com.example.tablereservation.partner.service;
 import com.example.tablereservation.exception.ErrorCode;
 import com.example.tablereservation.exception.ReservationException;
 import com.example.tablereservation.partner.dto.PartnerDto;
-import com.example.tablereservation.partner.dto.RegisterPartner;
-import com.example.tablereservation.partner.dto.LoginPartner;
+import com.example.tablereservation.partner.dto.RegisterPartnerDto;
+import com.example.tablereservation.partner.dto.LoginPartnerDto;
 import com.example.tablereservation.partner.entity.PartnerEntity;
 import com.example.tablereservation.partner.repository.PartnerRepository;
 import lombok.RequiredArgsConstructor;
@@ -33,14 +33,14 @@ public class PartnerService implements UserDetailsService {
      * 1. 로그인 아이디가 중복인지 확인
      * 2. 비밀번호는 passwordEncoder를 통해 저장
      */
-    public PartnerDto register(RegisterPartner.Request request) {
+    public PartnerDto register(RegisterPartnerDto.Request request) {
         if (this.partnerRepository.existsByLoginId(request.getLoginId())) {
             throw new ReservationException(ErrorCode.ID_ALREADY_EXIST);
         }
 
         request.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        PartnerEntity partnerEntity = this.partnerRepository.save(RegisterPartner.Request.toEntity(request));
+        PartnerEntity partnerEntity = this.partnerRepository.save(RegisterPartnerDto.Request.toEntity(request));
         return PartnerDto.fromEntity(partnerEntity);
     }
 
@@ -49,7 +49,7 @@ public class PartnerService implements UserDetailsService {
      * 1. 존재하는 파트너인지 확인
      * 2. 저장된 비밀번호와 로그인시 입력한 비밀번호가 동일한지 확인
      */
-    public PartnerEntity login(LoginPartner partner) {
+    public PartnerEntity login(LoginPartnerDto partner) {
         PartnerEntity partnerEntity = this.partnerRepository.findByLoginId(partner.getLoginId())
                 .orElseThrow(() -> new ReservationException(ErrorCode.ID_NOT_EXIST));
 

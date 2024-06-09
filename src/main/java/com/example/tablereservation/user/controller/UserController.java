@@ -1,8 +1,8 @@
 package com.example.tablereservation.user.controller;
 
 import com.example.tablereservation.security.TokenProvider;
-import com.example.tablereservation.user.dto.LoginUser;
-import com.example.tablereservation.user.dto.RegisterUser;
+import com.example.tablereservation.user.dto.LoginUserDto;
+import com.example.tablereservation.user.dto.RegisterUserDto;
 import com.example.tablereservation.user.dto.UserDto;
 import com.example.tablereservation.user.entity.UserEntity;
 import com.example.tablereservation.user.service.UserService;
@@ -24,16 +24,16 @@ public class UserController {
      * 유저 회원가입
      */
     @PostMapping("/user/register")
-    public ResponseEntity<?> register(@RequestBody @Valid RegisterUser.Request request) {
+    public ResponseEntity<?> register(@RequestBody @Valid RegisterUserDto.Request request) {
         UserDto userDto = this.userService.register(request);
-        return ResponseEntity.ok(RegisterUser.Response.fromDto(userDto));
+        return ResponseEntity.ok(RegisterUserDto.Response.fromDto(userDto));
     }
 
     /**
      * 유저 로그인 - 토큰값 반환
      */
     @PostMapping("/user/login")
-    public ResponseEntity<?> login(@RequestBody @Valid LoginUser request) {
+    public ResponseEntity<?> login(@RequestBody @Valid LoginUserDto request) {
         UserEntity userEntity = this.userService.login(request);
         String token = this.tokenProvider.generateToken(userEntity.getLoginId(), userEntity.getRole());
         return ResponseEntity.ok(token);

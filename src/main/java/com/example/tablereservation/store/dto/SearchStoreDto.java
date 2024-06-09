@@ -2,7 +2,7 @@ package com.example.tablereservation.store.dto;
 
 import lombok.*;
 
-public class SearchStore {
+public class SearchStoreDto {
 
     @Getter
     @Setter
@@ -23,8 +23,8 @@ public class SearchStore {
         private String storePhone;
         private String storeIntroduction;
 
-        public static SearchStore.Response fromDto(StoreDto storeDto) {
-            return SearchStore.Response.builder()
+        public static SearchStoreDto.Response fromDto(StoreDto storeDto) {
+            return SearchStoreDto.Response.builder()
                     .storeName(storeDto.getStoreName())
                     .storeAddress(storeDto.getStoreAddress())
                     .storePhone(storeDto.getStorePhone())

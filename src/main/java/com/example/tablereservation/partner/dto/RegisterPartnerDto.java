@@ -7,7 +7,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
-public class RegisterPartner {
+public class RegisterPartnerDto {
 
     @Getter
     @Setter

@@ -1,10 +1,10 @@
 package com.example.tablereservation.store.controller;
 
 import com.example.tablereservation.partner.entity.PartnerEntity;
-import com.example.tablereservation.store.dto.RegisterStore;
-import com.example.tablereservation.store.dto.SearchStore;
+import com.example.tablereservation.store.dto.RegisterStoreDto;
+import com.example.tablereservation.store.dto.SearchStoreDto;
 import com.example.tablereservation.store.dto.StoreDto;
-import com.example.tablereservation.store.dto.UpdateStore;
+import com.example.tablereservation.store.dto.UpdateStoreDto;
 import com.example.tablereservation.store.service.StoreService;
 import com.example.tablereservation.common.type.SearchType;
 import jakarta.validation.Valid;
@@ -30,11 +30,11 @@ public class StoreController {
     @PreAuthorize("hasRole('PARTNER')")
     @PostMapping("/store/register")
     public ResponseEntity<?> registerStore(
-            @RequestBody @Valid RegisterStore.Request request,
+            @RequestBody @Valid RegisterStoreDto.Request request,
             @AuthenticationPrincipal PartnerEntity partnerEntity
     ) {
         StoreDto storeDto = this.storeService.registerStore(request, partnerEntity);
-        return ResponseEntity.ok(RegisterStore.Response.fromDto(storeDto));
+        return ResponseEntity.ok(RegisterStoreDto.Response.fromDto(storeDto));
     }
 
     /**
@@ -44,11 +44,11 @@ public class StoreController {
     @PutMapping("/store/update/{storeId}")
     public ResponseEntity<?> updateStore(
             @PathVariable("storeId") Long storeId,
-            @RequestBody @Valid UpdateStore.Request request,
+            @RequestBody @Valid UpdateStoreDto.Request request,
             @AuthenticationPrincipal PartnerEntity partnerEntity
     ) {
         StoreDto storeDto = this.storeService.updateStore(storeId, request, partnerEntity);
-        return ResponseEntity.ok(UpdateStore.Response.fromDto(storeDto));
+        return ResponseEntity.ok(UpdateStoreDto.Response.fromDto(storeDto));
     }
 
     /**
@@ -71,11 +71,11 @@ public class StoreController {
     public ResponseEntity<?> findStore(
             @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
             @RequestParam(value = "searchType", defaultValue = "ALL") SearchType searchType,
-            @RequestBody @Valid SearchStore.Request request
+            @RequestBody @Valid SearchStoreDto.Request request
     ) {
         Pageable pageable = Pageable.ofSize(pageSize);
         Page<StoreDto> storeList = this.storeService.findStore(pageable, searchType, request);
-        Page<SearchStore.Response> response = storeList.map(SearchStore.Response::fromDto);
+        Page<SearchStoreDto.Response> response = storeList.map(SearchStoreDto.Response::fromDto);
         return ResponseEntity.ok(response);
     }
 }

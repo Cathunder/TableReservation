@@ -7,7 +7,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
-public class UpdateStore {
+public class UpdateStoreDto {
 
     @Getter
     @Setter

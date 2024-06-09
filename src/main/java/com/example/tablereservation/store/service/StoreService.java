@@ -3,10 +3,10 @@ package com.example.tablereservation.store.service;
 import com.example.tablereservation.exception.ErrorCode;
 import com.example.tablereservation.exception.ReservationException;
 import com.example.tablereservation.partner.entity.PartnerEntity;
-import com.example.tablereservation.store.dto.RegisterStore;
-import com.example.tablereservation.store.dto.SearchStore;
+import com.example.tablereservation.store.dto.RegisterStoreDto;
+import com.example.tablereservation.store.dto.SearchStoreDto;
 import com.example.tablereservation.store.dto.StoreDto;
-import com.example.tablereservation.store.dto.UpdateStore;
+import com.example.tablereservation.store.dto.UpdateStoreDto;
 import com.example.tablereservation.store.entity.StoreEntity;
 import com.example.tablereservation.store.repository.StoreRepository;
 import com.example.tablereservation.common.type.SearchType;
@@ -31,7 +31,7 @@ public class StoreService {
      * 2. createStoreEntity()
      * 3. 매장 등록
      */
-    public StoreDto registerStore(RegisterStore.Request request, PartnerEntity partnerEntity) {
+    public StoreDto registerStore(RegisterStoreDto.Request request, PartnerEntity partnerEntity) {
         if (storeRepository.existsByStoreName(request.getStoreName())) {
             throw new ReservationException(ErrorCode.STORE_NAME_ALREADY_EXIST);
         }
@@ -46,7 +46,7 @@ public class StoreService {
      * 2. 본인의 매장인지 확인
      * 3. updateStoreEntity()
      */
-    public StoreDto updateStore(Long storeId, UpdateStore.Request request, PartnerEntity partnerEntity) {
+    public StoreDto updateStore(Long storeId, UpdateStoreDto.Request request, PartnerEntity partnerEntity) {
         StoreEntity storeEntity = storeRepository.findById(storeId)
                 .orElseThrow(() -> new ReservationException(ErrorCode.STORE_NOT_EXIST));
 
@@ -78,7 +78,7 @@ public class StoreService {
      * createStoreEntity()
      * 1. storeEntity 생성
      */
-    private StoreEntity createStoreEntity(RegisterStore.Request request, PartnerEntity partnerEntity) {
+    private StoreEntity createStoreEntity(RegisterStoreDto.Request request, PartnerEntity partnerEntity) {
         return StoreEntity.builder()
                 .partner(partnerEntity)
                 .storeName(request.getStoreName())
@@ -93,7 +93,7 @@ public class StoreService {
      * 1. 수정값이 있을 경우 매장정보를 수정한다.
      * 2. 수정된 날짜를 추가한다.
      */
-    private StoreEntity updateStoreEntity(UpdateStore.Request request, StoreEntity storeEntity) {
+    private StoreEntity updateStoreEntity(UpdateStoreDto.Request request, StoreEntity storeEntity) {
         if (request.getStoreName() != null) {
             storeEntity.setStoreName(request.getStoreName());
         }
@@ -123,7 +123,7 @@ public class StoreService {
      * 2. 매장이름으로 검색
      * 3. 매장주소로 검색
      */
-    public Page<StoreDto> findStore(Pageable pageable, SearchType searchType, SearchStore.Request request) {
+    public Page<StoreDto> findStore(Pageable pageable, SearchType searchType, SearchStoreDto.Request request) {
         String searchContents = request.getSearchContents();
 
         if (searchType == SearchType.ALL) {

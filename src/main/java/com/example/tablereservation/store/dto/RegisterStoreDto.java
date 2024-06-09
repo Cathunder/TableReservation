@@ -6,7 +6,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
-public class RegisterStore {
+public class RegisterStoreDto {
 
     @Getter
     @Setter

@@ -1,10 +1,10 @@
-package com.example.tablereservation.user.dto;
+package com.example.tablereservation.partner.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class LoginUser {
+public class LoginPartnerDto {
 
     @NotBlank(message = "로그인 아이디를 입력하세요.")
     private String loginId;

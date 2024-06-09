@@ -2,8 +2,8 @@ package com.example.tablereservation.user.service;
 
 import com.example.tablereservation.exception.ErrorCode;
 import com.example.tablereservation.exception.ReservationException;
-import com.example.tablereservation.user.dto.LoginUser;
-import com.example.tablereservation.user.dto.RegisterUser;
+import com.example.tablereservation.user.dto.LoginUserDto;
+import com.example.tablereservation.user.dto.RegisterUserDto;
 import com.example.tablereservation.user.dto.UserDto;
 import com.example.tablereservation.user.entity.UserEntity;
 import com.example.tablereservation.user.repository.UserRepository;
@@ -31,14 +31,14 @@ public class UserService implements UserDetailsService {
      * 1. 로그인 아이디가 중복인지 확인
      * 2. 비밀번호는 passwordEncoder를 통해 저장
      */
-    public UserDto register(RegisterUser.Request request) {
+    public UserDto register(RegisterUserDto.Request request) {
         if (this.userRepository.existsByLoginId(request.getLoginId())) {
             throw new ReservationException(ErrorCode.ID_ALREADY_EXIST);
         }
 
         request.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        UserEntity userEntity = this.userRepository.save(RegisterUser.Request.toEntity(request));
+        UserEntity userEntity = this.userRepository.save(RegisterUserDto.Request.toEntity(request));
         return UserDto.toEntity(userEntity);
     }
 
@@ -47,7 +47,7 @@ public class UserService implements UserDetailsService {
      * 1. 존재하는 유저인지 확인
      * 2. 저장된 비밀번호와 로그인시 입력한 비밀번호가 동일한지 확인
      */
-    public UserEntity login(LoginUser user) {
+    public UserEntity login(LoginUserDto user) {
         UserEntity userEntity = this.userRepository.findByLoginId(user.getLoginId())
                 .orElseThrow(() -> new ReservationException(ErrorCode.ID_NOT_EXIST));
 
