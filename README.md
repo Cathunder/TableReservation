@@ -1,5 +1,11 @@
 # 매장 테이블 예약 서비스
 
+# ERD
+<details>
+<summary>ERD</summary>
+<img width="765" alt="ERD" src="https://github.com/Cathunder/TableReservation/assets/102372626/4c83f307-ecac-4657-837f-9ada20012d81">
+</details>
+
 # API 설명
 
 ## 1. 사용자
