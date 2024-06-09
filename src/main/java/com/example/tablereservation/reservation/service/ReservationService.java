@@ -76,8 +76,9 @@ public class ReservationService {
      * 매장 도착 확인
      * 1. 예약이 존재하는지 확인
      * 2. 예약한 유저와 로그인한 유저가 동일한지 확인
-     * 3. 예약시간 10분전 시도했는지 확인
-     * 4. 10분 사이에 시도했다면 예약상태를 변경
+     * 3. 예약이 APPROVE된 예약인지 확인
+     * 4. 예약시간 10분전 시도했는지 확인
+     * 5. 예약상태를 도착완료로 변경
      */
     public ReservationDto arrived(Long reservationId, UserEntity userEntity) {
         ReservationEntity reservationEntity = this.reservationRepository.findById(reservationId)
@@ -85,6 +86,10 @@ public class ReservationService {
 
         if (!reservationEntity.getUser().getId().equals(userEntity.getId())) {
             throw new ReservationException(ErrorCode.UNAUTHORIZED);
+        }
+
+        if (!reservationEntity.getStatus().equals(ReservationStatus.APPROVE)) {
+            throw new ReservationException(ErrorCode.RESERVATION_STATUS_NOT_APPROVE);
         }
 
         LocalDateTime reservationAt = reservationEntity.getReservationAt();
@@ -103,13 +108,20 @@ public class ReservationService {
     /**
      * 매장 사용 완료
      * 1. checkReservationAndPartner()
-     * 2. 예약이 ARRIVED 상태인 경우만 COMPLETE로 처리 가능
+     * 2. 예약이 ARRIVED 상태인지 확인
+     * 3. 현재시간이 예약시간 이후인지 확인
      */
     public ReservationDto complete(Long reservationId, PartnerEntity partnerEntity) {
         ReservationEntity reservationEntity = checkReservationAndPartner(reservationId, partnerEntity);
 
-        if(reservationEntity.getStatus() != ReservationStatus.ARRIVED) {
+        if (reservationEntity.getStatus() != ReservationStatus.ARRIVED) {
             throw new ReservationException(ErrorCode.RESERVATION_STATUS_NOT_ARRIVED);
+        }
+
+        LocalDateTime reservationAt = reservationEntity.getReservationAt();
+        LocalDateTime now = LocalDateTime.now();
+        if(!now.isAfter(reservationAt)) {
+            throw new ReservationException(ErrorCode.CAN_COMPLETE_AFTER_RESERVATION);
         }
 
         reservationEntity.setStatus(ReservationStatus.COMPLETE);
@@ -161,7 +173,11 @@ public class ReservationService {
         LocalDateTime reservationAt = LocalDateTime.of(date, time);
         LocalDateTime nowPlusOneHour = LocalDateTime.now().plusHours(1);
 
-        if(reservationAt.isBefore(nowPlusOneHour)) {
+        if (reservationAt.isBefore(LocalDateTime.now())) {
+            throw new ReservationException(ErrorCode.CANNOT_RESERVE_BEFORE_NOW);
+        }
+
+        if (reservationAt.isBefore(nowPlusOneHour)) {
             throw new ReservationException(ErrorCode.CANNOT_RESERVE_BEFORE_1HOUR);
         }
     }
