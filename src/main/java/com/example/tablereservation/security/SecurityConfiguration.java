@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HttpBasicConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -32,24 +31,8 @@ public class SecurityConfiguration {
                 .sessionManagement(sessionManagement ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/store/add",
-                                "/store/update/",
-                                "/store/delete/"
-                        ).hasRole("PARTNER")
-                        .requestMatchers(
-                                "/reservation/register"
-                        ).hasRole("USER")
                         .anyRequest().permitAll())
                 .addFilterBefore(this.authenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
-
-//    @Bean
-//    public WebSecurityCustomizer webSecurityCustomizer() {
-//        return web -> web.ignoring().requestMatchers(
-//                "/partner/register", "/partner/login",
-//                "/user/login", "/user/register"
-//        );
-//    }
 }
