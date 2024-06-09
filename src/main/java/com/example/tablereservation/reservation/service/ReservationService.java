@@ -52,7 +52,7 @@ public class ReservationService {
      * 매장별 예약 확인
      * 1. 매장이 존재하는지 확인
      * 2. 자기(파트너) 매장에 대한 접근인지 확인
-     * 2. 매장 id에 해당하는 모든 예약 가져오기
+     * 3. 매장 id에 해당하는 모든 예약 가져오기
      */
     public Page<ReservationDto> findReservations(Pageable pageable, Long storeId, PartnerEntity partnerEntity) {
         StoreEntity storeEntity = this.storeRepository.findById(storeId)

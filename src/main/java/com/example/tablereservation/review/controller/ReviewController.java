@@ -12,6 +12,8 @@ import com.example.tablereservation.user.entity.UserEntity;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -70,5 +72,18 @@ public class ReviewController {
         }
 
         return ResponseEntity.ok("review_id: " + reviewId + " -> 삭제완료");
+    }
+
+    /**
+     * 매장별 리뷰 찾기
+     */
+    @GetMapping("review/list")
+    public ResponseEntity<?> findReviews(
+            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+            @RequestParam("storeId") Long storeId
+    ) {
+        Pageable pageable = Pageable.ofSize(pageSize);
+        Page<ReviewDto> reviewList = this.reviewService.findReviews(pageable, storeId);
+        return ResponseEntity.ok(reviewList);
     }
 }

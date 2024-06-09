@@ -12,9 +12,12 @@ import com.example.tablereservation.review.dto.UpdateReviewDto;
 import com.example.tablereservation.review.entity.ReviewEntity;
 import com.example.tablereservation.review.repository.ReviewRepository;
 import com.example.tablereservation.store.entity.StoreEntity;
+import com.example.tablereservation.store.repository.StoreRepository;
 import com.example.tablereservation.user.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -24,6 +27,7 @@ public class ReviewService {
 
     private final ReservationRepository reservationRepository;
     private final ReviewRepository reviewRepository;
+    private final StoreRepository storeRepository;
 
     /**
      * 리뷰등록
@@ -124,5 +128,18 @@ public class ReviewService {
         }
 
         this.reviewRepository.delete(reviewEntity);
+    }
+
+    /**
+     * 매장별 리뷰 검색
+     * 1. 매장이 존재하는지 확인
+     * 2. 매장 id에 해당하는 모든 리뷰 가져오기
+     */
+    public Page<ReviewDto> findReviews(Pageable pageable, Long storeId) {
+        this.storeRepository.findById(storeId)
+                .orElseThrow(() -> new ReservationException(ErrorCode.STORE_NOT_EXIST));
+
+        Page<ReviewEntity> reviewEntities = this.reviewRepository.findAllByStoreId(pageable, storeId);
+        return reviewEntities.map(ReviewDto::fromEntity);
     }
 }
