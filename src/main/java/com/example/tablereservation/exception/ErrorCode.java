@@ -26,7 +26,7 @@ public enum ErrorCode {
 
     // 매장
     STORE_NAME_ALREADY_EXIST("이미 등록된 매장명입니다.", HttpStatus.CONFLICT.value()),
-    STORE_NOT_EXIST("존재하지 않는 매장입니다.", HttpStatus.BAD_REQUEST.value()),
+    STORE_NOT_EXIST("매장이 존재하지 않습니다.", HttpStatus.BAD_REQUEST.value()),
 
     // 예약
     RESERVATION_ALREADY_EXIST("해당 시간대에 이미 예약이 존재합니다. 다른 시간대를 선택해주세요.", HttpStatus.CONFLICT.value()),

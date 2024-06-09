@@ -8,6 +8,8 @@ import com.example.tablereservation.user.entity.UserEntity;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -31,6 +33,21 @@ public class ReservationController {
     ) {
         ReservationDto reservationDto = this.reservationService.register(request, userEntity);
         return ResponseEntity.ok(RegisterReservationDto.Response.fromDto(reservationDto));
+    }
+
+    /**
+     * 매장별 예약 확인
+     */
+    @PreAuthorize("hasRole('PARTNER')")
+    @GetMapping("/reservation/list")
+    public ResponseEntity<?> findReservations(
+            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+            @RequestParam("storeId") Long storeId,
+            @AuthenticationPrincipal PartnerEntity partnerEntity
+    ) {
+        Pageable pageable = Pageable.ofSize(pageSize);
+        Page<ReservationDto> reservationList = this.reservationService.findReservations(pageable, storeId, partnerEntity);
+        return ResponseEntity.ok(reservationList);
     }
 
     /**

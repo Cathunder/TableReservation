@@ -13,6 +13,8 @@ import com.example.tablereservation.store.repository.StoreRepository;
 import com.example.tablereservation.user.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -44,6 +46,24 @@ public class ReservationService {
 
         ReservationEntity resultEntity = this.reservationRepository.save(createReservationEntity(request, storeEntity, userEntity));
         return ReservationDto.fromEntity(resultEntity);
+    }
+
+    /**
+     * 매장별 예약 확인
+     * 1. 매장이 존재하는지 확인
+     * 2. 자기(파트너) 매장에 대한 접근인지 확인
+     * 2. 매장 id에 해당하는 모든 예약 가져오기
+     */
+    public Page<ReservationDto> findReservations(Pageable pageable, Long storeId, PartnerEntity partnerEntity) {
+        StoreEntity storeEntity = this.storeRepository.findById(storeId)
+                .orElseThrow(() -> new ReservationException(ErrorCode.STORE_NOT_EXIST));
+
+        if (!storeEntity.getPartner().getId().equals(partnerEntity.getId())) {
+            throw new ReservationException(ErrorCode.UNAUTHORIZED);
+        }
+
+        Page<ReservationEntity> reservationEntities = this.reservationRepository.findAllByStoreId(pageable, storeId);
+        return reservationEntities.map(ReservationDto::fromEntity);
     }
 
     /**
