@@ -176,7 +176,7 @@ eyJhbGci...
 
 경로 및 요청
 
-`GET` `http://localhost:8080/store/delete/5`
+`DELETE` `http://localhost:8080/store/delete/5`
 
 `Authorization`: `Bearer eyJhbGci...`
 
@@ -545,11 +545,11 @@ review_id: 4 -> 삭제완료
 <details> 
 <summary>매장별 리뷰 찾기</summary>
 
-경로 및 요청
+- 경로 및 요청
 
 `GET` `http://localhost:8080/review/list?storeId=4`
 
-결과
+- 결과
 ```
 {
     "content": [
